@@ -37,8 +37,12 @@ exports.DashboardDataService = void 0;
 const vscode = __importStar(require("vscode"));
 const child_process = __importStar(require("child_process"));
 const util_1 = require("util");
+const serviceContainer_1 = require("../serviceContainer");
 const exec = (0, util_1.promisify)(child_process.exec);
 class DashboardDataService {
+    get executionService() {
+        return serviceContainer_1.serviceContainer.get('FlutterExecutionService');
+    }
     async getDashboardData() {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         const cwd = workspaceFolders ? workspaceFolders[0].uri.fsPath : undefined;
@@ -108,7 +112,7 @@ class DashboardDataService {
     }
     async getFlutterVersions(cwd) {
         try {
-            const { stdout } = await exec('flutter --version', { cwd });
+            const { stdout } = await this.executionService.runRaw(['--version'], { cwd });
             const flutterMatch = stdout.match(/Flutter\s+([^\s]+)/);
             const dartMatch = stdout.match(/Dart\s+([^\s]+)/);
             return {
@@ -122,7 +126,7 @@ class DashboardDataService {
     }
     async getDevices(cwd) {
         try {
-            const { stdout } = await exec('flutter devices --machine', { cwd });
+            const { stdout } = await this.executionService.runRaw(['devices', '--machine'], { cwd });
             const devicesData = JSON.parse(stdout);
             return devicesData.map((d) => ({
                 name: d.name,

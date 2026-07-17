@@ -118,6 +118,16 @@
           "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "title": "Flutter CLI Assistant",
+      "properties": {
+        "flutter-cli-assistant.flutterSdkPath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom absolute path to the Flutter SDK."
+        }
+      }
     }
   },
   "scripts": {

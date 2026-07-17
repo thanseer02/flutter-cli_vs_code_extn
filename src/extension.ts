@@ -10,8 +10,9 @@ import { DoctorCommand } from './commands/doctorCommand';
 import { DashboardCommand } from './commands/dashboardCommand';
 import { FlutterCommand } from './commands/flutterCommand';
 import { COMMANDS } from './constants';
-import { ILogger, IProcessManager, IFlutterService, IWorkspaceService, IErrorAnalyzerService, IDashboardDataService } from './types';
+import { ILogger, IProcessManager, IFlutterService, IWorkspaceService, IErrorAnalyzerService, IDashboardDataService, IFlutterExecutionService } from './types';
 import { ProcessManager } from './services/terminal/processManager';
+import { FlutterExecutionService } from './services/flutter/flutterExecutionService';
 import { FlutterService } from './services/flutter/flutterService';
 import { WorkspaceService } from './services/workspace/workspaceService';
 import { ErrorAnalyzerService } from './services/analyzer/errorAnalyzerService';
@@ -29,6 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
         // 1. Initialize Core Services
         const logger = new ConsoleLogger();
         const processManager = new ProcessManager();
+        const flutterExecutionService = new FlutterExecutionService();
         const flutterService = new FlutterService();
         const workspaceService = new WorkspaceService();
         const errorAnalyzerService = new ErrorAnalyzerService();
@@ -37,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
         // 2. Register Services in Dependency Injection Container
         serviceContainer.register<ILogger>('Logger', logger);
         serviceContainer.register<IProcessManager>('ProcessManager', processManager);
+        serviceContainer.register<IFlutterExecutionService>('FlutterExecutionService', flutterExecutionService);
         serviceContainer.register<IFlutterService>('FlutterService', flutterService);
         serviceContainer.register<IWorkspaceService>('WorkspaceService', workspaceService);
         serviceContainer.register<IErrorAnalyzerService>('ErrorAnalyzerService', errorAnalyzerService);

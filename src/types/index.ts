@@ -51,6 +51,15 @@ export interface IProcessManager {
 }
 
 /**
+ * Interface for the Flutter Execution Service.
+ * Resolves the correct binary (fvm, custom sdk, or system default) before running.
+ */
+export interface IFlutterExecutionService {
+    run(args: string[], options?: CommandOptions): Promise<CommandResult>;
+    runRaw(args: string[], options?: CommandOptions): Promise<{ stdout: string, stderr: string }>;
+}
+
+/**
  * Interface for the Flutter Service.
  * Provides a domain-specific API for executing Flutter CLI commands.
  */

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { IFlutterService, IProcessManager } from '../../types';
+import { IFlutterService, IFlutterExecutionService } from '../../types';
 import { CommandResult } from '../../models/command';
 import { serviceContainer } from '../serviceContainer';
 
@@ -8,46 +8,47 @@ import { serviceContainer } from '../serviceContainer';
  * Keeps business logic decoupled from low-level terminal process management.
  */
 export class FlutterService implements IFlutterService {
-    private get processManager(): IProcessManager {
-        return serviceContainer.get<IProcessManager>('ProcessManager');
+    
+    private get executionService(): IFlutterExecutionService {
+        return serviceContainer.get<IFlutterExecutionService>('FlutterExecutionService');
     }
 
     /**
      * Executes `flutter build apk`.
      */
     async run(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['run'], { cancellationToken: token });
+        return this.executionService.run(['run'], { cancellationToken: token });
     }
 
     async buildApk(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['build', 'apk'], { cancellationToken: token });
+        return this.executionService.run(['build', 'apk'], { cancellationToken: token });
     }
 
     async buildAppBundle(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['build', 'appbundle'], { cancellationToken: token });
+        return this.executionService.run(['build', 'appbundle'], { cancellationToken: token });
     }
 
     async buildWeb(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['build', 'web'], { cancellationToken: token });
+        return this.executionService.run(['build', 'web'], { cancellationToken: token });
     }
 
     async clean(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['clean'], { cancellationToken: token });
+        return this.executionService.run(['clean'], { cancellationToken: token });
     }
 
     async pubGet(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['pub', 'get'], { cancellationToken: token });
+        return this.executionService.run(['pub', 'get'], { cancellationToken: token });
     }
 
     async pubUpgrade(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['pub', 'upgrade'], { cancellationToken: token });
+        return this.executionService.run(['pub', 'upgrade'], { cancellationToken: token });
     }
 
     async doctor(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['doctor'], { cancellationToken: token });
+        return this.executionService.run(['doctor'], { cancellationToken: token });
     }
 
     async devices(token?: vscode.CancellationToken): Promise<CommandResult> {
-        return this.processManager.spawnCommand('flutter', ['devices'], { cancellationToken: token });
+        return this.executionService.run(['devices'], { cancellationToken: token });
     }
 }

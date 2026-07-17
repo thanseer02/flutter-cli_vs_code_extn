@@ -1,13 +1,18 @@
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
 import { promisify } from 'util';
-import { IDashboardDataService } from '../../types';
+import { IDashboardDataService, IFlutterExecutionService } from '../../types';
 import { DashboardData } from '../../models/dashboard';
+import { serviceContainer } from '../serviceContainer';
 
 const exec = promisify(child_process.exec);
 
 export class DashboardDataService implements IDashboardDataService {
     
+    private get executionService(): IFlutterExecutionService {
+        return serviceContainer.get<IFlutterExecutionService>('FlutterExecutionService');
+    }
+
     public async getDashboardData(): Promise<DashboardData> {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         const cwd = workspaceFolders ? workspaceFolders[0].uri.fsPath : undefined;
@@ -88,7 +93,7 @@ export class DashboardDataService implements IDashboardDataService {
 
     private async getFlutterVersions(cwd: string): Promise<{ flutter: string; dart: string }> {
         try {
-            const { stdout } = await exec('flutter --version', { cwd });
+            const { stdout } = await this.executionService.runRaw(['--version'], { cwd });
             const flutterMatch = stdout.match(/Flutter\s+([^\s]+)/);
             const dartMatch = stdout.match(/Dart\s+([^\s]+)/);
             
@@ -103,7 +108,7 @@ export class DashboardDataService implements IDashboardDataService {
 
     private async getDevices(cwd: string): Promise<{ name: string; id: string; isEmulator: boolean }[]> {
         try {
-            const { stdout } = await exec('flutter devices --machine', { cwd });
+            const { stdout } = await this.executionService.runRaw(['devices', '--machine'], { cwd });
             const devicesData = JSON.parse(stdout);
             
             return devicesData.map((d: any) => ({

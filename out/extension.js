@@ -48,6 +48,7 @@ const dashboardCommand_1 = require("./commands/dashboardCommand");
 const flutterCommand_1 = require("./commands/flutterCommand");
 const constants_1 = require("./constants");
 const processManager_1 = require("./services/terminal/processManager");
+const flutterExecutionService_1 = require("./services/flutter/flutterExecutionService");
 const flutterService_1 = require("./services/flutter/flutterService");
 const workspaceService_1 = require("./services/workspace/workspaceService");
 const errorAnalyzerService_1 = require("./services/analyzer/errorAnalyzerService");
@@ -63,6 +64,7 @@ function activate(context) {
         // 1. Initialize Core Services
         const logger = new consoleLogger_1.ConsoleLogger();
         const processManager = new processManager_1.ProcessManager();
+        const flutterExecutionService = new flutterExecutionService_1.FlutterExecutionService();
         const flutterService = new flutterService_1.FlutterService();
         const workspaceService = new workspaceService_1.WorkspaceService();
         const errorAnalyzerService = new errorAnalyzerService_1.ErrorAnalyzerService();
@@ -70,6 +72,7 @@ function activate(context) {
         // 2. Register Services in Dependency Injection Container
         serviceContainer_1.serviceContainer.register('Logger', logger);
         serviceContainer_1.serviceContainer.register('ProcessManager', processManager);
+        serviceContainer_1.serviceContainer.register('FlutterExecutionService', flutterExecutionService);
         serviceContainer_1.serviceContainer.register('FlutterService', flutterService);
         serviceContainer_1.serviceContainer.register('WorkspaceService', workspaceService);
         serviceContainer_1.serviceContainer.register('ErrorAnalyzerService', errorAnalyzerService);
