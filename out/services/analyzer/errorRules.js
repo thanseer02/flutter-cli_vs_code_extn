@@ -126,6 +126,18 @@ exports.errorRules = [
                 'https://docs.flutter.dev/deployment/android'
             ]
         })
+    },
+    {
+        pattern: /Failed to apply plugin \[id '(.+)'\]/i,
+        analyze: (match) => ({
+            problem: 'Gradle Daemon Error',
+            explanation: `The Gradle daemon failed to apply a plugin (${match[1]}). This can happen if the plugin version is incompatible with your Gradle version, or if the Gradle daemon is in a corrupted state.`,
+            fixes: [
+                'Run `cd android && ./gradlew --stop` to kill the daemon, then try again.',
+                'Check your android/build.gradle and ensure the plugin versions match your environment.'
+            ],
+            links: []
+        })
     }
 ];
 //# sourceMappingURL=errorRules.js.map

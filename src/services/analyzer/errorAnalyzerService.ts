@@ -36,7 +36,8 @@ export class ErrorAnalyzerService implements IErrorAnalyzerService {
 
     private analyzeChunk(chunk: string) {
         // Quick short-circuit if no obvious error indicators are present to save CPU
-        if (!chunk.toLowerCase().includes('error') && !chunk.includes('Exception') && !chunk.includes('FAILED')) {
+        const lowerChunk = chunk.toLowerCase();
+        if (!lowerChunk.includes('error') && !lowerChunk.includes('exception') && !lowerChunk.includes('failed')) {
             return;
         }
 
