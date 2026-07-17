@@ -6,6 +6,7 @@ import { HelloWorldCommand } from './commands/helloWorldCommand';
 import { ClearLogsCommand } from './commands/clearLogsCommand';
 import { ExportLogsCommand } from './commands/exportLogsCommand';
 import { ShowLogsCommand } from './commands/showLogsCommand';
+import { DoctorCommand } from './commands/doctorCommand';
 import { FlutterCommand } from './commands/flutterCommand';
 import { COMMANDS } from './constants';
 import { ILogger, IProcessManager, IFlutterService, IWorkspaceService } from './types';
@@ -57,7 +58,7 @@ export function activate(context: vscode.ExtensionContext) {
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.FLUTTER_CLEAN, 'clean', 'Flutter Clean'));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.PUB_GET, 'pubGet', 'Pub Get'));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.PUB_UPGRADE, 'pubUpgrade', 'Pub Upgrade'));
-        commandManager.registerCommand(context, new FlutterCommand(COMMANDS.DOCTOR, 'doctor', 'Flutter Doctor'));
+        commandManager.registerCommand(context, new DoctorCommand(context.extensionUri));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.DEVICES, 'devices', 'Flutter Devices'));
 
         // 6. Register Sidebar Tree Provider

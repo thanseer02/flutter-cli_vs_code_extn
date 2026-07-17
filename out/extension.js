@@ -43,6 +43,7 @@ const helloWorldCommand_1 = require("./commands/helloWorldCommand");
 const clearLogsCommand_1 = require("./commands/clearLogsCommand");
 const exportLogsCommand_1 = require("./commands/exportLogsCommand");
 const showLogsCommand_1 = require("./commands/showLogsCommand");
+const doctorCommand_1 = require("./commands/doctorCommand");
 const flutterCommand_1 = require("./commands/flutterCommand");
 const constants_1 = require("./constants");
 const processManager_1 = require("./services/terminal/processManager");
@@ -85,7 +86,7 @@ function activate(context) {
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.FLUTTER_CLEAN, 'clean', 'Flutter Clean'));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_GET, 'pubGet', 'Pub Get'));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_UPGRADE, 'pubUpgrade', 'Pub Upgrade'));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.DOCTOR, 'doctor', 'Flutter Doctor'));
+        commandManager.registerCommand(context, new doctorCommand_1.DoctorCommand(context.extensionUri));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.DEVICES, 'devices', 'Flutter Devices'));
         // 6. Register Sidebar Tree Provider
         const flutterTreeProvider = new flutterTreeProvider_1.FlutterTreeProvider();
