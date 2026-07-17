@@ -76,19 +76,19 @@ class FlutterTreeProvider {
             return Promise.resolve([]);
         }
         const items = [
-            new FlutterSidebarItem('Dashboard', constants_1.COMMANDS.SHOW_DASHBOARD, 'dashboard'),
-            // new FlutterSidebarItem('▶ Run', COMMANDS.RUN, 'play'),
-            new FlutterSidebarItem('📦 Build APK', constants_1.COMMANDS.BUILD_APK, 'package'),
-            new FlutterSidebarItem('📦 Build App Bundle', constants_1.COMMANDS.BUILD_APPBUNDLE, 'package')
+            new FlutterSidebarItem('Dashboard', constants_1.COMMANDS.SHOW_DASHBOARD, 'layout'),
+            // new FlutterSidebarItem('Run App', COMMANDS.RUN, 'play'),
+            new FlutterSidebarItem('Build APK', constants_1.COMMANDS.BUILD_APK, 'archive'),
+            new FlutterSidebarItem('Build App Bundle', constants_1.COMMANDS.BUILD_APPBUNDLE, 'package')
         ];
         if (process.platform === 'darwin') {
-            items.push(new FlutterSidebarItem('🍎 Build IPA', constants_1.COMMANDS.BUILD_IPA, 'package'));
+            items.push(new FlutterSidebarItem('Build IPA', constants_1.COMMANDS.BUILD_IPA, 'device-mobile'));
         }
         items.push(
-        // new FlutterSidebarItem('🌐 Build Web', COMMANDS.BUILD_WEB, 'globe'),
-        new FlutterSidebarItem('🧹 Clean', constants_1.COMMANDS.FLUTTER_CLEAN, 'trash'), new FlutterSidebarItem('📥 Pub Get', constants_1.COMMANDS.PUB_GET, 'cloud-download'), 
-        // new FlutterSidebarItem('⬆ Pub Upgrade', COMMANDS.PUB_UPGRADE, 'arrow-up'),
-        new FlutterSidebarItem('🔍 Doctor', constants_1.COMMANDS.DOCTOR, 'pulse'), new FlutterSidebarItem('📱 Devices', constants_1.COMMANDS.DEVICES, 'device-mobile'), new FlutterSidebarItem('📄 Logs', constants_1.COMMANDS.SHOW_LOGS, 'output'));
+        // new FlutterSidebarItem('Build Web', COMMANDS.BUILD_WEB, 'globe'),
+        new FlutterSidebarItem('Clean', constants_1.COMMANDS.FLUTTER_CLEAN, 'clear-all'), new FlutterSidebarItem('Pub Get', constants_1.COMMANDS.PUB_GET, 'repo-pull'), 
+        // new FlutterSidebarItem('Pub Upgrade', COMMANDS.PUB_UPGRADE, 'arrow-up'),
+        new FlutterSidebarItem('Doctor', constants_1.COMMANDS.DOCTOR, 'heart'), new FlutterSidebarItem('Devices', constants_1.COMMANDS.DEVICES, 'vm'), new FlutterSidebarItem('Logs', constants_1.COMMANDS.SHOW_LOGS, 'terminal'));
         return Promise.resolve(items);
     }
     /**

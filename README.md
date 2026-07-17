@@ -20,6 +20,25 @@ A production-quality VS Code extension that supercharges your Flutter developer 
 3. Search for `Flutter CLI Assistant`.
 4. Click Install.
 
+## Development & Updating
+
+If you are modifying the source code of this extension and want your changes to be reflected in the installed extension, follow these steps:
+
+1. **Compile your changes**: Any modifications to `.ts` files need to be compiled.
+   ```bash
+   npm run compile
+   ```
+2. **Package the extension**: Bundle the changes into an installable `.vsix` file.
+   ```bash
+   npx @vscode/vsce package
+   ```
+3. **Install the new package**: Overwrite your existing installation by installing the newly generated `.vsix` file.
+   ```bash
+   code --install-extension flutter-cli-assistant-1.0.0.vsix
+   ```
+
+*Note: For rapid development without reinstalling, press `F5` in VS Code to launch an Extension Development Host window that instantly reflects your code changes.*
+
 ## Usage
 
 When you open a Flutter project (a folder containing a `pubspec.yaml`), the **Flutter Assistant** icon will automatically appear in your primary Activity Bar on the left.
