@@ -37,7 +37,15 @@ export interface IServiceContainer {
 }
 
 import * as vscode from 'vscode';
-import { CommandOptions, CommandResult } from '../models/command';
+import { CommandResult, CommandOptions } from '../models/command';
+import { CommandPipeline } from '../models/pipeline';
+
+/**
+ * Interface for the Pipeline Executor Service.
+ */
+export interface IPipelineExecutorService {
+    execute(pipeline: CommandPipeline, token?: import('vscode').CancellationToken): Promise<void>;
+}
 
 /**
  * Interface for the Process Manager.

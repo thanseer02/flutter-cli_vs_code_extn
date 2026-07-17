@@ -49,11 +49,12 @@ const flutterCommand_1 = require("./commands/flutterCommand");
 const constants_1 = require("./constants");
 const processManager_1 = require("./services/terminal/processManager");
 const flutterExecutionService_1 = require("./services/flutter/flutterExecutionService");
-const flutterService_1 = require("./services/flutter/flutterService");
 const workspaceService_1 = require("./services/workspace/workspaceService");
 const errorAnalyzerService_1 = require("./services/analyzer/errorAnalyzerService");
 const dashboardDataService_1 = require("./services/dashboard/dashboardDataService");
+const pipelineExecutorService_1 = require("./services/pipeline/pipelineExecutorService");
 const flutterTreeProvider_1 = require("./providers/tree/flutterTreeProvider");
+const pipelineSteps_1 = require("./utils/pipelineSteps");
 /**
  * This method is called when your extension is activated.
  * The extension is activated the very first time the command is executed.
@@ -65,7 +66,7 @@ function activate(context) {
         const logger = new consoleLogger_1.ConsoleLogger();
         const processManager = new processManager_1.ProcessManager();
         const flutterExecutionService = new flutterExecutionService_1.FlutterExecutionService();
-        const flutterService = new flutterService_1.FlutterService();
+        const pipelineExecutorService = new pipelineExecutorService_1.PipelineExecutorService();
         const workspaceService = new workspaceService_1.WorkspaceService();
         const errorAnalyzerService = new errorAnalyzerService_1.ErrorAnalyzerService();
         const dashboardDataService = new dashboardDataService_1.DashboardDataService();
@@ -73,7 +74,7 @@ function activate(context) {
         serviceContainer_1.serviceContainer.register('Logger', logger);
         serviceContainer_1.serviceContainer.register('ProcessManager', processManager);
         serviceContainer_1.serviceContainer.register('FlutterExecutionService', flutterExecutionService);
-        serviceContainer_1.serviceContainer.register('FlutterService', flutterService);
+        serviceContainer_1.serviceContainer.register('PipelineExecutorService', pipelineExecutorService);
         serviceContainer_1.serviceContainer.register('WorkspaceService', workspaceService);
         serviceContainer_1.serviceContainer.register('ErrorAnalyzerService', errorAnalyzerService);
         serviceContainer_1.serviceContainer.register('DashboardDataService', dashboardDataService);
@@ -90,15 +91,16 @@ function activate(context) {
         commandManager.registerCommand(context, new showLogsCommand_1.ShowLogsCommand(context.extensionUri));
         commandManager.registerCommand(context, new dashboardCommand_1.DashboardCommand());
         // Register generic Flutter commands
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.RUN, 'run', 'Flutter Run'));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APK, 'buildApk', 'Building APK'));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APPBUNDLE, 'buildAppBundle', 'Building AppBundle'));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_WEB, 'buildWeb', 'Building Web'));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.FLUTTER_CLEAN, 'clean', 'Flutter Clean'));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_GET, 'pubGet', 'Pub Get'));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_UPGRADE, 'pubUpgrade', 'Pub Upgrade'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.RUN, pipelineSteps_1.PIPELINES.run));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APK, pipelineSteps_1.PIPELINES.buildApk));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APPBUNDLE, pipelineSteps_1.PIPELINES.buildAppBundle));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_WEB, pipelineSteps_1.PIPELINES.buildWeb));
+        // Single-step commands registered as single-step pipelines
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.FLUTTER_CLEAN, { name: 'Flutter Clean', steps: [pipelineSteps_1.PIPELINE_STEPS.clean] }));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_GET, { name: 'Pub Get', steps: [pipelineSteps_1.PIPELINE_STEPS.pubGet] }));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_UPGRADE, { name: 'Pub Upgrade', steps: [{ name: 'Upgrading packages...', commandType: 'flutter', args: ['pub', 'upgrade'] }] }));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.DEVICES, { name: 'Devices', steps: [{ name: 'Fetching devices...', commandType: 'flutter', args: ['devices'] }] }));
         commandManager.registerCommand(context, new doctorCommand_1.DoctorCommand(context.extensionUri));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.DEVICES, 'devices', 'Flutter Devices'));
         // 6. Register Sidebar Tree Provider
         const flutterTreeProvider = new flutterTreeProvider_1.FlutterTreeProvider();
         vscode.window.registerTreeDataProvider('flutter-cli-assistant.sidebar', flutterTreeProvider);

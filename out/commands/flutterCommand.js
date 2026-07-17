@@ -39,51 +39,42 @@ const serviceContainer_1 = require("../services/serviceContainer");
 const errors_1 = require("../utils/errors");
 const analysisWebview_1 = require("../providers/webview/analysisWebview");
 /**
- * A generic command to execute any Flutter Service method.
+ * A generic command to execute a Flutter Build Pipeline.
  */
 class FlutterCommand {
-    constructor(id, action, progressTitle) {
+    constructor(id, pipeline) {
         this.id = id;
-        this.action = action;
-        this.progressTitle = progressTitle;
+        this.pipeline = pipeline;
     }
     async execute() {
-        const flutterService = serviceContainer_1.serviceContainer.get('FlutterService');
+        const executor = serviceContainer_1.serviceContainer.get('PipelineExecutorService');
         const logger = serviceContainer_1.serviceContainer.get('Logger');
         // Always show the output channel when starting a command
         logger.show();
-        // Use VS Code's progress UI in the bottom right corner
-        await vscode.window.withProgress({
-            location: vscode.ProgressLocation.Notification,
-            title: this.progressTitle,
-            cancellable: true
-        }, async (progress, token) => {
-            try {
-                await flutterService[this.action](token);
-                vscode.window.showInformationMessage(`✅ ${this.progressTitle} completed successfully.`);
+        try {
+            await executor.execute(this.pipeline);
+            vscode.window.showInformationMessage(`✅ ${this.pipeline.name} completed successfully.`);
+        }
+        catch (error) {
+            // Check if it's a known cancellation
+            if (error.message === 'Pipeline Cancelled' || error.name === 'CommandCancelledError') {
+                vscode.window.showWarningMessage(`🛑 ${this.pipeline.name} was cancelled.`);
+                return;
             }
-            catch (error) {
-                // Check if it's a known cancellation
-                if (error.name === 'CommandCancelledError') {
-                    vscode.window.showWarningMessage(`🛑 ${this.progressTitle} was cancelled.`);
+            // If it's a CommandExecutionError from a specific step, we have stdout/stderr to analyze
+            if (error instanceof errors_1.CommandExecutionError) {
+                const analyzer = serviceContainer_1.serviceContainer.get('ErrorAnalyzerService');
+                const rawLogs = `${error.stdout}\n${error.stderr}`;
+                const analysis = analyzer.analyze(rawLogs);
+                if (analysis) {
+                    vscode.window.showErrorMessage(`❌ ${this.pipeline.name} failed: ${analysis.problem}`);
+                    analysisWebview_1.AnalysisWebview.render(analysis);
                     return;
                 }
-                // If it's a CommandExecutionError, we have stdout/stderr to analyze
-                if (error instanceof errors_1.CommandExecutionError) {
-                    const analyzer = serviceContainer_1.serviceContainer.get('ErrorAnalyzerService');
-                    // Combine stdout and stderr since some tools write errors to stdout
-                    const rawLogs = `${error.stdout}\n${error.stderr}`;
-                    const analysis = analyzer.analyze(rawLogs);
-                    if (analysis) {
-                        vscode.window.showErrorMessage(`❌ ${this.progressTitle} failed: ${analysis.problem}`);
-                        analysisWebview_1.AnalysisWebview.render(analysis);
-                        return;
-                    }
-                }
-                // Fallback for unknown errors
-                vscode.window.showErrorMessage(`❌ ${this.progressTitle} failed.`);
             }
-        });
+            // Fallback for unknown errors
+            vscode.window.showErrorMessage(`❌ ${this.pipeline.name} failed.`);
+        }
     }
 }
 exports.FlutterCommand = FlutterCommand;
