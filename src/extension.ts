@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { OutputChannelLogger } from './utils/logger';
+import { ConsoleLogger } from './utils/consoleLogger';
 import { serviceContainer } from './services/serviceContainer';
 import { CommandManager } from './commands/commandManager';
 import { HelloWorldCommand } from './commands/helloWorldCommand';
@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     try {
         // 1. Initialize Core Services
-        const logger = new OutputChannelLogger();
+        const logger = new ConsoleLogger();
         const processManager = new ProcessManager();
         const flutterService = new FlutterService();
         const workspaceService = new WorkspaceService();
@@ -48,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
         commandManager.registerCommand(context, new HelloWorldCommand());
         commandManager.registerCommand(context, new ClearLogsCommand());
         commandManager.registerCommand(context, new ExportLogsCommand());
-        commandManager.registerCommand(context, new ShowLogsCommand());
+        commandManager.registerCommand(context, new ShowLogsCommand(context.extensionUri));
         
         // Register generic Flutter commands
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.RUN, 'run', 'Flutter Run'));

@@ -1,15 +1,17 @@
-import { ICommand, ILogger } from '../types';
+import * as vscode from 'vscode';
+import { ICommand } from '../types';
 import { COMMANDS } from '../constants';
-import { serviceContainer } from '../services/serviceContainer';
+import { ConsoleWebview } from '../providers/webview/consoleWebview';
 
 /**
- * Command to show the Output Channel logs.
+ * Command to show the Live Console Webview.
  */
 export class ShowLogsCommand implements ICommand {
     public readonly id = COMMANDS.SHOW_LOGS;
 
+    constructor(private readonly extensionUri: vscode.Uri) {}
+
     async execute(): Promise<void> {
-        const logger = serviceContainer.get<ILogger>('Logger');
-        logger.show();
+        ConsoleWebview.render(this.extensionUri);
     }
 }

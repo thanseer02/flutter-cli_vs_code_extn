@@ -1,19 +1,15 @@
 import * as vscode from 'vscode';
 import { ILogger } from '../types';
-import { CHANNELS } from '../constants';
 
 /**
- * Logger implementation that writes to a VS Code OutputChannel.
- * This class wraps VS Code's OutputChannel to provide a standardized logging interface.
- * It also maintains an in-memory buffer of logs for exporting.
+ * A logger that stores logs in a buffer and broadcasts them via an EventEmitter.
+ * This is meant to back the Console Webview, which will subscribe to these events.
  */
-export class OutputChannelLogger implements ILogger {
-    private outputChannel: vscode.OutputChannel;
+export class ConsoleLogger implements ILogger {
     private logBuffer: string[] = [];
-
-    constructor() {
-        this.outputChannel = vscode.window.createOutputChannel(CHANNELS.MAIN_OUTPUT);
-    }
+    
+    private _onDidLog = new vscode.EventEmitter<string>();
+    public readonly onDidLog = this._onDidLog.event;
 
     /**
      * Formats the log message with a timestamp and log level.
@@ -24,8 +20,11 @@ export class OutputChannelLogger implements ILogger {
     }
 
     private append(message: string): void {
-        this.outputChannel.appendLine(message);
         this.logBuffer.push(message);
+        
+        // Broadcast the raw formatted string to any listeners (like the Webview)
+        this._onDidLog.fire(message);
+
         // Limit buffer size to prevent memory leaks (e.g. max 10000 lines)
         if (this.logBuffer.length > 10000) {
             this.logBuffer.shift();
@@ -44,12 +43,10 @@ export class OutputChannelLogger implements ILogger {
         this.append(this.formatMessage('ERROR', message));
         if (error) {
             const errorStr = error.toString();
-            this.outputChannel.appendLine(errorStr);
-            this.logBuffer.push(errorStr);
+            this.append(errorStr);
             
             if (error.stack) {
-                this.outputChannel.appendLine(error.stack);
-                this.logBuffer.push(error.stack);
+                this.append(error.stack);
             }
         }
     }
@@ -59,19 +56,23 @@ export class OutputChannelLogger implements ILogger {
     }
 
     /**
-     * Brings the Output Channel to the foreground in the VS Code UI.
+     * Triggers the Show Logs command which will focus the Console Webview.
      */
     show(): void {
-        this.outputChannel.show();
+        vscode.commands.executeCommand('flutter-cli-assistant.showLogs');
     }
 
     /**
-     * Clears the Output Channel and the internal log buffer.
+     * Clears the internal log buffer and notifies listeners.
      */
     clear(): void {
-        this.outputChannel.clear();
         this.logBuffer = [];
+        this._onDidLog.fire('__CLEAR__');
         this.info('Logs cleared.');
+    }
+
+    getLogBuffer(): string[] {
+        return this.logBuffer;
     }
 
     /**

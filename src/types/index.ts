@@ -7,6 +7,7 @@
  * Ensures consistent logging across the extension, whether to VS Code OutputChannel or console.
  */
 export interface ILogger {
+    readonly onDidLog: vscode.Event<string>;
     info(message: string): void;
     warn(message: string): void;
     error(message: string, error?: any): void;
@@ -14,6 +15,7 @@ export interface ILogger {
     show(): void;
     clear(): void;
     exportLogs(): Promise<void>;
+    getLogBuffer(): string[];
 }
 
 /**

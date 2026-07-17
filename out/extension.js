@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
-const logger_1 = require("./utils/logger");
+const consoleLogger_1 = require("./utils/consoleLogger");
 const serviceContainer_1 = require("./services/serviceContainer");
 const commandManager_1 = require("./commands/commandManager");
 const helloWorldCommand_1 = require("./commands/helloWorldCommand");
@@ -58,7 +58,7 @@ function activate(context) {
     console.log('Activating "flutter-cli-assistant"...');
     try {
         // 1. Initialize Core Services
-        const logger = new logger_1.OutputChannelLogger();
+        const logger = new consoleLogger_1.ConsoleLogger();
         const processManager = new processManager_1.ProcessManager();
         const flutterService = new flutterService_1.FlutterService();
         const workspaceService = new workspaceService_1.WorkspaceService();
@@ -77,7 +77,7 @@ function activate(context) {
         commandManager.registerCommand(context, new helloWorldCommand_1.HelloWorldCommand());
         commandManager.registerCommand(context, new clearLogsCommand_1.ClearLogsCommand());
         commandManager.registerCommand(context, new exportLogsCommand_1.ExportLogsCommand());
-        commandManager.registerCommand(context, new showLogsCommand_1.ShowLogsCommand());
+        commandManager.registerCommand(context, new showLogsCommand_1.ShowLogsCommand(context.extensionUri));
         // Register generic Flutter commands
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.RUN, 'run', 'Flutter Run'));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APK, 'buildApk', 'Building APK'));

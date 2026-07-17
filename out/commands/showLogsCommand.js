@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShowLogsCommand = void 0;
 const constants_1 = require("../constants");
-const serviceContainer_1 = require("../services/serviceContainer");
+const consoleWebview_1 = require("../providers/webview/consoleWebview");
 /**
- * Command to show the Output Channel logs.
+ * Command to show the Live Console Webview.
  */
 class ShowLogsCommand {
-    constructor() {
+    constructor(extensionUri) {
+        this.extensionUri = extensionUri;
         this.id = constants_1.COMMANDS.SHOW_LOGS;
     }
     async execute() {
-        const logger = serviceContainer_1.serviceContainer.get('Logger');
-        logger.show();
+        consoleWebview_1.ConsoleWebview.render(this.extensionUri);
     }
 }
 exports.ShowLogsCommand = ShowLogsCommand;
