@@ -24,16 +24,29 @@ export class AndroidInfoProvider {
                     packageName = namespaceMatch[1];
                 }
             }
-        } catch {}
 
-        try {
-            const pubspecUri = vscode.Uri.joinPath(vscode.Uri.file(cwd), 'pubspec.yaml');
-            const pubData = await vscode.workspace.fs.readFile(pubspecUri);
-            const match = pubData.toString().match(/^version:\s*(.+)$/m);
-            if (match) {
-                version = match[1].trim();
+            const versionNameMatch = content.match(/versionName\s+['"]([^'"]+)['"]/);
+            const versionCodeMatch = content.match(/versionCode\s+(\d+)/);
+            if (versionNameMatch && versionCodeMatch) {
+                version = `${versionNameMatch[1]} (${versionCodeMatch[1]})`;
             }
         } catch {}
+
+        if (version === 'Unknown') {
+            try {
+                const pubspecUri = vscode.Uri.joinPath(vscode.Uri.file(cwd), 'pubspec.yaml');
+                const pubData = await vscode.workspace.fs.readFile(pubspecUri);
+                const match = pubData.toString().match(/^version:\s*([\d\.]+)\+(\d+)$/m);
+                if (match) {
+                    version = `${match[1]} (${match[2]})`;
+                } else {
+                    const matchSimple = pubData.toString().match(/^version:\s*(.+)$/m);
+                    if (matchSimple) {
+                        version = matchSimple[1].trim();
+                    }
+                }
+            } catch {}
+        }
 
         return { packageName, version };
     }
