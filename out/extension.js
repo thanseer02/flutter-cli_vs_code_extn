@@ -63,23 +63,22 @@ const pipelineSteps_1 = require("./utils/pipelineSteps");
 function activate(context) {
     console.log('Activating "flutter-cli-assistant"...');
     try {
-        // 1. Initialize Core Services
+        // 1. Initialize & Register Core Services
         const logger = new consoleLogger_1.ConsoleLogger();
-        const processManager = new processManager_1.ProcessManager();
-        const flutterExecutionService = new flutterExecutionService_1.FlutterExecutionService();
-        const pipelineExecutorService = new pipelineExecutorService_1.PipelineExecutorService();
-        const workspaceService = new workspaceService_1.WorkspaceService();
-        const errorAnalyzerService = new errorAnalyzerService_1.ErrorAnalyzerService();
-        const dashboardDataService = new dashboardDataService_1.DashboardDataService();
-        // 2. Register Services in Dependency Injection Container
         serviceContainer_1.serviceContainer.register('Logger', logger);
+        const processManager = new processManager_1.ProcessManager();
         serviceContainer_1.serviceContainer.register('ProcessManager', processManager);
+        const flutterExecutionService = new flutterExecutionService_1.FlutterExecutionService();
         serviceContainer_1.serviceContainer.register('FlutterExecutionService', flutterExecutionService);
+        const pipelineExecutorService = new pipelineExecutorService_1.PipelineExecutorService();
         serviceContainer_1.serviceContainer.register('PipelineExecutorService', pipelineExecutorService);
+        const workspaceService = new workspaceService_1.WorkspaceService();
         serviceContainer_1.serviceContainer.register('WorkspaceService', workspaceService);
+        // Dependent services can now safely resolve their dependencies from the container
+        const errorAnalyzerService = new errorAnalyzerService_1.ErrorAnalyzerService();
         serviceContainer_1.serviceContainer.register('ErrorAnalyzerService', errorAnalyzerService);
+        const dashboardDataService = new dashboardDataService_1.DashboardDataService();
         serviceContainer_1.serviceContainer.register('DashboardDataService', dashboardDataService);
-        errorAnalyzerService.attachToLogger(logger);
         // Subscribe to real-time errors
         context.subscriptions.push(errorAnalyzerService.onDidDetectError((analysis) => {
             vscode.window.showErrorMessage(`❌ Issue Detected: ${analysis.problem}`);

@@ -15,17 +15,8 @@ export class ErrorAnalyzerService implements IErrorAnalyzerService {
     private _logger?: ILogger;
 
     constructor() {
-        this.attachToLoggerFromContainer();
-    }
-
-    private attachToLoggerFromContainer(): void {
-        try {
-            const logger = serviceContainer.get<ILogger>('Logger');
-            this.attachToLogger(logger);
-        } catch {
-            // Logger may not be registered yet during activation.
-            // It will be attached later once the service is registered.
-        }
+        const logger = serviceContainer.get<ILogger>('Logger');
+        this.attachToLogger(logger);
     }
 
     public attachToLogger(logger: ILogger): void {

@@ -30,24 +30,28 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Activating "flutter-cli-assistant"...');
 
     try {
-        // 1. Initialize Core Services
+        // 1. Initialize & Register Core Services
         const logger = new ConsoleLogger();
-        const processManager = new ProcessManager();
-        const flutterExecutionService = new FlutterExecutionService();
-        const pipelineExecutorService = new PipelineExecutorService();
-        const workspaceService = new WorkspaceService();
-        const errorAnalyzerService = new ErrorAnalyzerService();
-        const dashboardDataService = new DashboardDataService();
-        
-        // 2. Register Services in Dependency Injection Container
         serviceContainer.register<ILogger>('Logger', logger);
+
+        const processManager = new ProcessManager();
         serviceContainer.register<IProcessManager>('ProcessManager', processManager);
+
+        const flutterExecutionService = new FlutterExecutionService();
         serviceContainer.register<IFlutterExecutionService>('FlutterExecutionService', flutterExecutionService);
+
+        const pipelineExecutorService = new PipelineExecutorService();
         serviceContainer.register<IPipelineExecutorService>('PipelineExecutorService', pipelineExecutorService);
+
+        const workspaceService = new WorkspaceService();
         serviceContainer.register<IWorkspaceService>('WorkspaceService', workspaceService);
+
+        // Dependent services can now safely resolve their dependencies from the container
+        const errorAnalyzerService = new ErrorAnalyzerService();
         serviceContainer.register<IErrorAnalyzerService>('ErrorAnalyzerService', errorAnalyzerService);
+
+        const dashboardDataService = new DashboardDataService();
         serviceContainer.register<IDashboardDataService>('DashboardDataService', dashboardDataService);
-        errorAnalyzerService.attachToLogger(logger);
 
         // Subscribe to real-time errors
         context.subscriptions.push(
