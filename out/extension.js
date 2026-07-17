@@ -42,9 +42,13 @@ const commandManager_1 = require("./commands/commandManager");
 const helloWorldCommand_1 = require("./commands/helloWorldCommand");
 const clearLogsCommand_1 = require("./commands/clearLogsCommand");
 const exportLogsCommand_1 = require("./commands/exportLogsCommand");
+const showLogsCommand_1 = require("./commands/showLogsCommand");
+const flutterCommand_1 = require("./commands/flutterCommand");
+const constants_1 = require("./constants");
 const processManager_1 = require("./services/terminal/processManager");
 const flutterService_1 = require("./services/flutter/flutterService");
 const workspaceService_1 = require("./services/workspace/workspaceService");
+const flutterTreeProvider_1 = require("./providers/tree/flutterTreeProvider");
 /**
  * This method is called when your extension is activated.
  * The extension is activated the very first time the command is executed.
@@ -68,10 +72,28 @@ function activate(context) {
         // 4. Initialize Command Manager
         const commandManager = new commandManager_1.CommandManager();
         context.subscriptions.push(commandManager);
-        // 4. Register Commands
+        // 5. Register Commands
         commandManager.registerCommand(context, new helloWorldCommand_1.HelloWorldCommand());
         commandManager.registerCommand(context, new clearLogsCommand_1.ClearLogsCommand());
         commandManager.registerCommand(context, new exportLogsCommand_1.ExportLogsCommand());
+        commandManager.registerCommand(context, new showLogsCommand_1.ShowLogsCommand());
+        // Register generic Flutter commands
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.RUN, 'run', 'Flutter Run'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APK, 'buildApk', 'Building APK'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APPBUNDLE, 'buildAppBundle', 'Building AppBundle'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_WEB, 'buildWeb', 'Building Web'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.FLUTTER_CLEAN, 'clean', 'Flutter Clean'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_GET, 'pubGet', 'Pub Get'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_UPGRADE, 'pubUpgrade', 'Pub Upgrade'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.DOCTOR, 'doctor', 'Flutter Doctor'));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.DEVICES, 'devices', 'Flutter Devices'));
+        // 6. Register Sidebar Tree Provider
+        const flutterTreeProvider = new flutterTreeProvider_1.FlutterTreeProvider();
+        vscode.window.registerTreeDataProvider('flutter-cli-assistant.sidebar', flutterTreeProvider);
+        // Re-render tree when workspace state changes (optional, but good practice)
+        workspaceService.onDidChangeProjectState(() => {
+            flutterTreeProvider.refresh();
+        });
         logger.info('Flutter CLI Assistant activated successfully.');
     }
     catch (error) {

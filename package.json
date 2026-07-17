@@ -19,13 +19,82 @@
       },
       {
         "command": "flutter-cli-assistant.clearLogs",
-        "title": "Flutter CLI: Clear Output Logs"
+        "title": "Flutter CLI: Clear Output Logs",
+        "icon": "$(trash)"
       },
       {
         "command": "flutter-cli-assistant.exportLogs",
-        "title": "Flutter CLI: Export Output Logs"
+        "title": "Flutter CLI: Export Output Logs",
+        "icon": "$(save)"
+      },
+      {
+        "command": "flutter-cli-assistant.run",
+        "title": "Flutter: Run"
+      },
+      {
+        "command": "flutter-cli-assistant.buildApk",
+        "title": "Flutter: Build APK"
+      },
+      {
+        "command": "flutter-cli-assistant.buildAppBundle",
+        "title": "Flutter: Build AppBundle"
+      },
+      {
+        "command": "flutter-cli-assistant.buildWeb",
+        "title": "Flutter: Build Web"
+      },
+      {
+        "command": "flutter-cli-assistant.flutterClean",
+        "title": "Flutter: Clean"
+      },
+      {
+        "command": "flutter-cli-assistant.pubGet",
+        "title": "Flutter: Pub Get"
+      },
+      {
+        "command": "flutter-cli-assistant.pubUpgrade",
+        "title": "Flutter: Pub Upgrade"
+      },
+      {
+        "command": "flutter-cli-assistant.doctor",
+        "title": "Flutter: Doctor"
+      },
+      {
+        "command": "flutter-cli-assistant.devices",
+        "title": "Flutter: Devices"
+      },
+      {
+        "command": "flutter-cli-assistant.showLogs",
+        "title": "Flutter: Show Logs"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "flutter-cli-assistant-explorer",
+          "title": "Flutter Assistant",
+          "icon": "$(terminal)"
+        }
+      ]
+    },
+    "views": {
+      "flutter-cli-assistant-explorer": [
+        {
+          "id": "flutter-cli-assistant.sidebar",
+          "name": "Commands",
+          "when": "flutter-cli-assistant.isFlutterProject"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "flutter-cli-assistant.clearLogs",
+          "when": "view == flutter-cli-assistant.sidebar",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

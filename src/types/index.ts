@@ -53,9 +53,15 @@ export interface IProcessManager {
  * Provides a domain-specific API for executing Flutter CLI commands.
  */
 export interface IFlutterService {
+    run(token?: vscode.CancellationToken): Promise<CommandResult>;
     buildApk(token?: vscode.CancellationToken): Promise<CommandResult>;
+    buildAppBundle(token?: vscode.CancellationToken): Promise<CommandResult>;
+    buildWeb(token?: vscode.CancellationToken): Promise<CommandResult>;
     clean(token?: vscode.CancellationToken): Promise<CommandResult>;
     pubGet(token?: vscode.CancellationToken): Promise<CommandResult>;
+    pubUpgrade(token?: vscode.CancellationToken): Promise<CommandResult>;
+    doctor(token?: vscode.CancellationToken): Promise<CommandResult>;
+    devices(token?: vscode.CancellationToken): Promise<CommandResult>;
 }
 
 /**

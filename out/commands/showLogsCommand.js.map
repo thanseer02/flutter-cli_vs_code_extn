@@ -1,0 +1,1 @@
+{"version":3,"file":"showLogsCommand.js","sourceRoot":"","sources":["../../src/commands/showLogsCommand.ts"],"names":[],"mappings":";;;AACA,4CAAwC;AACxC,mEAAgE;AAEhE;;GAEG;AACH,MAAa,eAAe;IAA5B;QACoB,OAAE,GAAG,oBAAQ,CAAC,SAAS,CAAC;IAM5C,CAAC;IAJG,KAAK,CAAC,OAAO;QACT,MAAM,MAAM,GAAG,mCAAgB,CAAC,GAAG,CAAU,QAAQ,CAAC,CAAC;QACvD,MAAM,CAAC,IAAI,EAAE,CAAC;IAClB,CAAC;CACJ;AAPD,0CAOC"}
