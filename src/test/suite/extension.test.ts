@@ -24,9 +24,9 @@ suite('Extension Test Suite', () => {
 
     test('ErrorAnalyzerService detects Gradle Error', (done) => {
         const logger = new MockLogger();
-        serviceContainer.register<ILogger>('Logger', logger);
-        
+        try { serviceContainer.register<ILogger>('Logger', logger); } catch {}
         const analyzer = new ErrorAnalyzerService();
+        analyzer.attachToLogger(logger);
         
         analyzer.onDidDetectError((analysis) => {
             assert.strictEqual(analysis.problem, 'Gradle Daemon Error');
@@ -38,8 +38,9 @@ suite('Extension Test Suite', () => {
         logger.error('Failed to apply plugin [id \\\'com.android.internal.version-check\\\']');
     });
     test('ErrorAnalyzerService can attach to a logger after construction', (done) => {
-        const analyzer = new ErrorAnalyzerService();
         const logger = new MockLogger();
+        try { serviceContainer.register<ILogger>('Logger', logger); } catch {}
+        const analyzer = new ErrorAnalyzerService();
 
         analyzer.attachToLogger(logger);
 
