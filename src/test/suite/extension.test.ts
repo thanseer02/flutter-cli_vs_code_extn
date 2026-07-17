@@ -37,4 +37,18 @@ suite('Extension Test Suite', () => {
         logger.info('Some random log output');
         logger.error('Failed to apply plugin [id \\\'com.android.internal.version-check\\\']');
     });
+    test('ErrorAnalyzerService can attach to a logger after construction', (done) => {
+        const analyzer = new ErrorAnalyzerService();
+        const logger = new MockLogger();
+
+        analyzer.attachToLogger(logger);
+
+        analyzer.onDidDetectError((analysis) => {
+            assert.strictEqual(analysis.problem, 'Gradle Daemon Error');
+            assert.strictEqual(analysis.fixes.length > 0, true);
+            done();
+        });
+
+        logger.error("Failed to apply plugin [id 'com.android.internal.version-check']");
+    });
 });

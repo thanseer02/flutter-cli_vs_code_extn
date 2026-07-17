@@ -79,6 +79,7 @@ function activate(context) {
         serviceContainer_1.serviceContainer.register('WorkspaceService', workspaceService);
         serviceContainer_1.serviceContainer.register('ErrorAnalyzerService', errorAnalyzerService);
         serviceContainer_1.serviceContainer.register('DashboardDataService', dashboardDataService);
+        errorAnalyzerService.attachToLogger(logger);
         // Subscribe to real-time errors
         context.subscriptions.push(errorAnalyzerService.onDidDetectError((analysis) => {
             vscode.window.showErrorMessage(`❌ Issue Detected: ${analysis.problem}`);

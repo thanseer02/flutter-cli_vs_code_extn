@@ -12,9 +12,30 @@ export class ErrorAnalyzerService implements IErrorAnalyzerService {
     private _onDidDetectError = new vscode.EventEmitter<ErrorAnalysis>();
     public readonly onDidDetectError = this._onDidDetectError.event;
     private _disposables: vscode.Disposable[] = [];
+    private _logger?: ILogger;
 
     constructor() {
-        const logger = serviceContainer.get<ILogger>('Logger');
+        this.attachToLoggerFromContainer();
+    }
+
+    private attachToLoggerFromContainer(): void {
+        try {
+            const logger = serviceContainer.get<ILogger>('Logger');
+            this.attachToLogger(logger);
+        } catch {
+            // Logger may not be registered yet during activation.
+            // It will be attached later once the service is registered.
+        }
+    }
+
+    public attachToLogger(logger: ILogger): void {
+        if (this._logger === logger) {
+            return;
+        }
+
+        this._logger = logger;
+        this._disposables.forEach(disposable => disposable.dispose());
+        this._disposables = [];
         this._disposables.push(
             logger.onDidLog((logChunk) => {
                 this.analyzeChunk(logChunk);

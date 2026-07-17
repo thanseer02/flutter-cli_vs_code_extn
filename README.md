@@ -1,67 +1,94 @@
 # Flutter CLI Assistant
 
 [![Version](https://img.shields.io/visual-studio-marketplace/v/MuhammadThanseer.flutter-cli-assistant)](https://marketplace.visualstudio.com/items?itemName=MuhammadThanseer.flutter-cli-assistant)
-
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/MuhammadThanseer.flutter-cli-assistant)](https://marketplace.visualstudio.com/items?itemName=MuhammadThanseer.flutter-cli-assistant)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/MuhammadThanseer.flutter-cli-assistant)](https://marketplace.visualstudio.com/items?itemName=MuhammadThanseer.flutter-cli-assistant)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A production-quality VS Code extension that supercharges your Flutter developer productivity by providing a beautiful GUI dashboard, intelligent error diagnostics, live console streaming, and one-click access to common Flutter commands.
+A production-quality VS Code extension that supercharges your Flutter development workflow with a beautiful GUI dashboard, intelligent error diagnostics, live console streaming, and one-click access to common Flutter commands — all without leaving your editor.
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Requirements](#requirements)
+- [Extension Settings](#extension-settings)
+- [Known Issues](#known-issues)
+- [Release Notes](#release-notes)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
 
 ## Features
 
-- **📊 Project Dashboard**: A beautiful, modern, theme-aware Webview providing a bird's-eye view of your project, dependencies, connected devices, and quick actions.
-- **🛠️ One-Click Actions**: Execute `flutter run`, `build apk`, `build appbundle`, `build web`, `clean`, `pub get`, and `pub upgrade` directly from the VS Code Sidebar without typing.
-- **Terminal Streaming Console**: A dedicated Live Console Webview featuring auto-scroll, colorized tags, and native search.
-- **🧠 Error Analyzer**: Automatically intercepts build failures, diagnoses common issues (e.g., Gradle, Java JDK mismatch, CocoaPods, Android SDK), and provides human-readable explanations and one-click fixes.
-- **🩺 Visual Flutter Doctor**: Parses raw `flutter doctor` output into a highly readable, icon-rich dashboard.
+| Feature | Description |
+|---|---|
+| 📊 **Project Dashboard** | A beautiful, modern, theme-aware Webview providing a bird's-eye view of your project, dependencies, connected devices, and quick actions. |
+| 🛠️ **One-Click Actions** | Execute `flutter run`, `build apk`, `build appbundle`, `build web`, `clean`, `pub get`, and `pub upgrade` directly from the VS Code Sidebar without typing a single command. |
+| 🖥️ **Terminal Streaming Console** | A dedicated Live Console Webview with auto-scroll, colorized tags, and native search. |
+| 🧠 **Error Analyzer** | Automatically intercepts build failures, diagnoses common issues (Gradle, Java JDK mismatch, CocoaPods, Android SDK, etc.), and offers human-readable explanations with one-click fixes. |
+| 🩺 **Visual Flutter Doctor** | Parses raw `flutter doctor` output into a clean, icon-rich, easy-to-read dashboard. |
+
+---
 
 ## Installation
 
-1. Open VS Code.
-2. Go to the Extensions view (`Ctrl+Shift+X` or `Cmd+Shift+X`).
-3. Search for `Flutter CLI Assistant`.
-4. Click Install.
+1. Open **VS Code**.
+2. Go to the Extensions view (`Ctrl+Shift+X` on Windows/Linux, `Cmd+Shift+X` on macOS).
+3. Search for **Flutter CLI Assistant**.
+4. Click **Install**.
 
-## Development & Updating
+Alternatively, install it directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=MuhammadThanseer.flutter-cli-assistant).
 
-If you are modifying the source code of this extension and want your changes to be reflected in the installed extension, follow these steps:
-
-1. **Compile your changes**: Any modifications to `.ts` files need to be compiled.
-   ```bash
-   npm run compile
-   ```
-2. **Package the extension**: Bundle the changes into an installable `.vsix` file.
-   ```bash
-   npx @vscode/vsce package
-   ```
-3. **Install the new package**: Overwrite your existing installation by installing the newly generated `.vsix` file.
-   ```bash
-   code --install-extension flutter-cli-assistant-1.0.0.vsix
-   ```
-
-*Note: For rapid development without reinstalling, press `F5` in VS Code to launch an Extension Development Host window that instantly reflects your code changes.*
+---
 
 ## Usage
 
-When you open a Flutter project (a folder containing a `pubspec.yaml`), the **Flutter Assistant** icon will automatically appear in your primary Activity Bar on the left.
+Open any Flutter project (a folder containing a `pubspec.yaml`), and the **Flutter Assistant** icon will automatically appear in your primary Activity Bar on the left.
 
-Clicking it opens the Sidebar, giving you instant access to the Dashboard and all commands.
+Click the icon to open the sidebar, giving you instant access to the dashboard and all available commands.
+
+---
 
 ## Requirements
 
-- **Flutter SDK**: Must be installed and available in your system's PATH.
-- **VS Code**: Version 1.80.0 or higher.
+- **Flutter SDK** — must be installed and available on your system's `PATH`.
+- **VS Code** — version `1.80.0` or higher.
+
+---
 
 ## Extension Settings
 
-Currently, this extension does not require any manual settings configuration. It automatically detects your workspace environment.
+This extension currently requires no manual configuration — it automatically detects your workspace environment.
+
+---
 
 ## Known Issues
 
-See the [GitHub Issue Tracker](https://github.com/thanseer02/flutter-cli_vs_code_extn/issues) for a list of known issues.
+See the [GitHub Issue Tracker](https://github.com/thanseer02/flutter-cli_vs_code_extn/issues) for a list of known issues and to report new ones.
+
+---
 
 ## Release Notes
 
-See [CHANGELOG.md](CHANGELOG.md) for full release notes.
+See [CHANGELOG.md](CHANGELOG.md) for the full release history.
 
 ---
-**Enjoy building beautiful apps with Flutter!**
+
+## Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/thanseer02/flutter-cli_vs_code_extn/issues) or submit a pull request.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+**Enjoy building beautiful apps with Flutter! 🚀**

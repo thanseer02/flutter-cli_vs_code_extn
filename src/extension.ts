@@ -47,6 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
         serviceContainer.register<IWorkspaceService>('WorkspaceService', workspaceService);
         serviceContainer.register<IErrorAnalyzerService>('ErrorAnalyzerService', errorAnalyzerService);
         serviceContainer.register<IDashboardDataService>('DashboardDataService', dashboardDataService);
+        errorAnalyzerService.attachToLogger(logger);
 
         // Subscribe to real-time errors
         context.subscriptions.push(

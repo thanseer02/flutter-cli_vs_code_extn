@@ -46,7 +46,25 @@ class ErrorAnalyzerService {
         this._onDidDetectError = new vscode.EventEmitter();
         this.onDidDetectError = this._onDidDetectError.event;
         this._disposables = [];
-        const logger = serviceContainer_1.serviceContainer.get('Logger');
+        this.attachToLoggerFromContainer();
+    }
+    attachToLoggerFromContainer() {
+        try {
+            const logger = serviceContainer_1.serviceContainer.get('Logger');
+            this.attachToLogger(logger);
+        }
+        catch {
+            // Logger may not be registered yet during activation.
+            // It will be attached later once the service is registered.
+        }
+    }
+    attachToLogger(logger) {
+        if (this._logger === logger) {
+            return;
+        }
+        this._logger = logger;
+        this._disposables.forEach(disposable => disposable.dispose());
+        this._disposables = [];
         this._disposables.push(logger.onDidLog((logChunk) => {
             this.analyzeChunk(logChunk);
         }));
