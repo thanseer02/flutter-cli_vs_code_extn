@@ -17,6 +17,7 @@ export class DashboardWebview {
                     case 'runAction':
                         // Basic mapping of dashboard commands to our VS Code commands
                         if (message.action === 'build apk') vscode.commands.executeCommand('flutter-cli-assistant.buildApk');
+                        if (message.action === 'build ipa') vscode.commands.executeCommand('flutter-cli-assistant.buildIpa');
                         if (message.action === 'pub get') vscode.commands.executeCommand('flutter-cli-assistant.pubGet');
                         if (message.action === 'clean') vscode.commands.executeCommand('flutter-cli-assistant.clean');
                         return;

@@ -108,6 +108,10 @@ class PipelineExecutorService {
                 }
                 catch (error) {
                     this.logger.error(`❌ Failed at step [${i + 1}/${totalSteps}]`);
+                    // Friendly CocoaPods check
+                    if (step.commandType === 'shell' && step.args[0] === 'pod' && error.message && error.message.includes('ENOENT')) {
+                        vscode.window.showErrorMessage('CocoaPods is not installed or not in your PATH. Please install it using: sudo gem install cocoapods');
+                    }
                     throw error; // Abort pipeline
                 }
             }

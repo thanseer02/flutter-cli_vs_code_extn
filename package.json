@@ -61,7 +61,8 @@
       },
       {
         "command": "flutter-cli-assistant.buildIpa",
-        "title": "Flutter: Build IPA"
+        "title": "Flutter: Build IPA",
+        "when": "isMac"
       },
       {
         "command": "flutter-cli-assistant.buildAppBundle",

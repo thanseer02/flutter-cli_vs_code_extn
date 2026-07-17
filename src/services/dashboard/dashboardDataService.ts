@@ -45,7 +45,7 @@ export class DashboardDataService implements IDashboardDataService {
             devices,
             // For now, we stub these out. In a real production app, we would use 
             // context.workspaceState to store and retrieve these arrays across sessions.
-            recentCommands: ['build apk', 'pub get', 'clean'],
+            recentCommands: ['build apk', 'build ipa', 'pub get', 'clean'],
             latestBuildStatus: 'idle'
         };
     }

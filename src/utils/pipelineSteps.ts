@@ -21,8 +21,12 @@ export const PIPELINES = {
         steps: [
             PIPELINE_STEPS.clean,
             PIPELINE_STEPS.pubGet,
+            { name: 'cd ios', commandType: 'shell', args: ['echo', 'Navigating to ios...'] },
+            { name: 'pod deintegrate', commandType: 'shell', args: ['pod', 'deintegrate'], cwd: 'ios' },
+            { name: 'pod cache clean --all', commandType: 'shell', args: ['pod', 'cache', 'clean', '--all'], cwd: 'ios' },
             PIPELINE_STEPS.podInstall,
-            { name: 'Building IPA...', commandType: 'flutter', args: ['build', 'ipa', '--release'] }
+            { name: 'Returning to project root', commandType: 'shell', args: ['echo', 'Returning to root...'] },
+            { name: 'flutter build ipa --release', commandType: 'flutter', args: ['build', 'ipa', '--release'] }
         ]
     } as CommandPipeline,
 

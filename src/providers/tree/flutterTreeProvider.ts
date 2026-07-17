@@ -45,13 +45,18 @@ export class FlutterTreeProvider implements vscode.TreeDataProvider<FlutterSideb
             return Promise.resolve([]);
         }
 
-        // Return the root level items
-        return Promise.resolve([
+        const items: FlutterSidebarItem[] = [
             new FlutterSidebarItem('Dashboard', COMMANDS.SHOW_DASHBOARD, 'dashboard'),
             new FlutterSidebarItem('▶ Run', COMMANDS.RUN, 'play'),
             new FlutterSidebarItem('📦 Build APK', COMMANDS.BUILD_APK, 'package'),
-            new FlutterSidebarItem('🍏 Build IPA', COMMANDS.BUILD_IPA, 'package'),
-            new FlutterSidebarItem('📦 Build AppBundle', COMMANDS.BUILD_APPBUNDLE, 'package'),
+            new FlutterSidebarItem('📦 Build App Bundle', COMMANDS.BUILD_APPBUNDLE, 'package')
+        ];
+        
+        if (process.platform === 'darwin') {
+            items.push(new FlutterSidebarItem('🍎 Build IPA', COMMANDS.BUILD_IPA, 'package'));
+        }
+
+        items.push(
             new FlutterSidebarItem('🌐 Build Web', COMMANDS.BUILD_WEB, 'globe'),
             new FlutterSidebarItem('🧹 Clean', COMMANDS.FLUTTER_CLEAN, 'trash'),
             new FlutterSidebarItem('📥 Pub Get', COMMANDS.PUB_GET, 'cloud-download'),
@@ -59,7 +64,9 @@ export class FlutterTreeProvider implements vscode.TreeDataProvider<FlutterSideb
             new FlutterSidebarItem('🔍 Doctor', COMMANDS.DOCTOR, 'pulse'),
             new FlutterSidebarItem('📱 Devices', COMMANDS.DEVICES, 'device-mobile'),
             new FlutterSidebarItem('📄 Logs', COMMANDS.SHOW_LOGS, 'output')
-        ]);
+        );
+
+        return Promise.resolve(items);
     }
 
     /**

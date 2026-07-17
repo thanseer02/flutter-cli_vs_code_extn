@@ -75,21 +75,17 @@ class FlutterTreeProvider {
             // No nested items
             return Promise.resolve([]);
         }
-        // Return the root level items
-        return Promise.resolve([
+        const items = [
             new FlutterSidebarItem('Dashboard', constants_1.COMMANDS.SHOW_DASHBOARD, 'dashboard'),
             new FlutterSidebarItem('▶ Run', constants_1.COMMANDS.RUN, 'play'),
             new FlutterSidebarItem('📦 Build APK', constants_1.COMMANDS.BUILD_APK, 'package'),
-            new FlutterSidebarItem('🍏 Build IPA', constants_1.COMMANDS.BUILD_IPA, 'package'),
-            new FlutterSidebarItem('📦 Build AppBundle', constants_1.COMMANDS.BUILD_APPBUNDLE, 'package'),
-            new FlutterSidebarItem('🌐 Build Web', constants_1.COMMANDS.BUILD_WEB, 'globe'),
-            new FlutterSidebarItem('🧹 Clean', constants_1.COMMANDS.FLUTTER_CLEAN, 'trash'),
-            new FlutterSidebarItem('📥 Pub Get', constants_1.COMMANDS.PUB_GET, 'cloud-download'),
-            new FlutterSidebarItem('⬆ Pub Upgrade', constants_1.COMMANDS.PUB_UPGRADE, 'arrow-up'),
-            new FlutterSidebarItem('🔍 Doctor', constants_1.COMMANDS.DOCTOR, 'pulse'),
-            new FlutterSidebarItem('📱 Devices', constants_1.COMMANDS.DEVICES, 'device-mobile'),
-            new FlutterSidebarItem('📄 Logs', constants_1.COMMANDS.SHOW_LOGS, 'output')
-        ]);
+            new FlutterSidebarItem('📦 Build App Bundle', constants_1.COMMANDS.BUILD_APPBUNDLE, 'package')
+        ];
+        if (process.platform === 'darwin') {
+            items.push(new FlutterSidebarItem('🍎 Build IPA', constants_1.COMMANDS.BUILD_IPA, 'package'));
+        }
+        items.push(new FlutterSidebarItem('🌐 Build Web', constants_1.COMMANDS.BUILD_WEB, 'globe'), new FlutterSidebarItem('🧹 Clean', constants_1.COMMANDS.FLUTTER_CLEAN, 'trash'), new FlutterSidebarItem('📥 Pub Get', constants_1.COMMANDS.PUB_GET, 'cloud-download'), new FlutterSidebarItem('⬆ Pub Upgrade', constants_1.COMMANDS.PUB_UPGRADE, 'arrow-up'), new FlutterSidebarItem('🔍 Doctor', constants_1.COMMANDS.DOCTOR, 'pulse'), new FlutterSidebarItem('📱 Devices', constants_1.COMMANDS.DEVICES, 'device-mobile'), new FlutterSidebarItem('📄 Logs', constants_1.COMMANDS.SHOW_LOGS, 'output'));
+        return Promise.resolve(items);
     }
     /**
      * Call this to refresh the view programmatically.
