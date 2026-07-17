@@ -47,7 +47,7 @@ export class FlutterTreeProvider implements vscode.TreeDataProvider<FlutterSideb
 
         const items: FlutterSidebarItem[] = [
             new FlutterSidebarItem('Dashboard', COMMANDS.SHOW_DASHBOARD, 'dashboard'),
-            new FlutterSidebarItem('▶ Run', COMMANDS.RUN, 'play'),
+            // new FlutterSidebarItem('▶ Run', COMMANDS.RUN, 'play'),
             new FlutterSidebarItem('📦 Build APK', COMMANDS.BUILD_APK, 'package'),
             new FlutterSidebarItem('📦 Build App Bundle', COMMANDS.BUILD_APPBUNDLE, 'package')
         ];
@@ -57,10 +57,10 @@ export class FlutterTreeProvider implements vscode.TreeDataProvider<FlutterSideb
         }
 
         items.push(
-            new FlutterSidebarItem('🌐 Build Web', COMMANDS.BUILD_WEB, 'globe'),
+            // new FlutterSidebarItem('🌐 Build Web', COMMANDS.BUILD_WEB, 'globe'),
             new FlutterSidebarItem('🧹 Clean', COMMANDS.FLUTTER_CLEAN, 'trash'),
             new FlutterSidebarItem('📥 Pub Get', COMMANDS.PUB_GET, 'cloud-download'),
-            new FlutterSidebarItem('⬆ Pub Upgrade', COMMANDS.PUB_UPGRADE, 'arrow-up'),
+            // new FlutterSidebarItem('⬆ Pub Upgrade', COMMANDS.PUB_UPGRADE, 'arrow-up'),
             new FlutterSidebarItem('🔍 Doctor', COMMANDS.DOCTOR, 'pulse'),
             new FlutterSidebarItem('📱 Devices', COMMANDS.DEVICES, 'device-mobile'),
             new FlutterSidebarItem('📄 Logs', COMMANDS.SHOW_LOGS, 'output')

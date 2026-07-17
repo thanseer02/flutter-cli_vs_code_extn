@@ -64,16 +64,16 @@ export function activate(context: vscode.ExtensionContext) {
         commandManager.registerCommand(context, new DashboardCommand());
         
         // Register generic Flutter commands
-        commandManager.registerCommand(context, new FlutterCommand(COMMANDS.RUN, PIPELINES.run));
+        // commandManager.registerCommand(context, new FlutterCommand(COMMANDS.RUN, PIPELINES.run));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.BUILD_APK, PIPELINES.buildApk));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.BUILD_IPA, PIPELINES.buildIpa));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.BUILD_APPBUNDLE, PIPELINES.buildAppBundle));
-        commandManager.registerCommand(context, new FlutterCommand(COMMANDS.BUILD_WEB, PIPELINES.buildWeb));
+        // commandManager.registerCommand(context, new FlutterCommand(COMMANDS.BUILD_WEB, PIPELINES.buildWeb));
         
         // Single-step commands registered as single-step pipelines
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.FLUTTER_CLEAN, { name: 'Flutter Clean', steps: [PIPELINE_STEPS.clean] }));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.PUB_GET, { name: 'Pub Get', steps: [PIPELINE_STEPS.pubGet] }));
-        commandManager.registerCommand(context, new FlutterCommand(COMMANDS.PUB_UPGRADE, { name: 'Pub Upgrade', steps: [{ name: 'Upgrading packages...', commandType: 'flutter', args: ['pub', 'upgrade'] }] }));
+        // commandManager.registerCommand(context, new FlutterCommand(COMMANDS.PUB_UPGRADE, { name: 'Pub Upgrade', steps: [{ name: 'Upgrading packages...', commandType: 'flutter', args: ['pub', 'upgrade'] }] }));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.DEVICES, { name: 'Devices', steps: [{ name: 'Fetching devices...', commandType: 'flutter', args: ['devices'] }] }));
         
         commandManager.registerCommand(context, new DoctorCommand(context.extensionUri));

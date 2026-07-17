@@ -91,15 +91,15 @@ function activate(context) {
         commandManager.registerCommand(context, new showLogsCommand_1.ShowLogsCommand(context.extensionUri));
         commandManager.registerCommand(context, new dashboardCommand_1.DashboardCommand());
         // Register generic Flutter commands
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.RUN, pipelineSteps_1.PIPELINES.run));
+        // commandManager.registerCommand(context, new FlutterCommand(COMMANDS.RUN, PIPELINES.run));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APK, pipelineSteps_1.PIPELINES.buildApk));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_IPA, pipelineSteps_1.PIPELINES.buildIpa));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APPBUNDLE, pipelineSteps_1.PIPELINES.buildAppBundle));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_WEB, pipelineSteps_1.PIPELINES.buildWeb));
+        // commandManager.registerCommand(context, new FlutterCommand(COMMANDS.BUILD_WEB, PIPELINES.buildWeb));
         // Single-step commands registered as single-step pipelines
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.FLUTTER_CLEAN, { name: 'Flutter Clean', steps: [pipelineSteps_1.PIPELINE_STEPS.clean] }));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_GET, { name: 'Pub Get', steps: [pipelineSteps_1.PIPELINE_STEPS.pubGet] }));
-        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_UPGRADE, { name: 'Pub Upgrade', steps: [{ name: 'Upgrading packages...', commandType: 'flutter', args: ['pub', 'upgrade'] }] }));
+        // commandManager.registerCommand(context, new FlutterCommand(COMMANDS.PUB_UPGRADE, { name: 'Pub Upgrade', steps: [{ name: 'Upgrading packages...', commandType: 'flutter', args: ['pub', 'upgrade'] }] }));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.DEVICES, { name: 'Devices', steps: [{ name: 'Fetching devices...', commandType: 'flutter', args: ['devices'] }] }));
         commandManager.registerCommand(context, new doctorCommand_1.DoctorCommand(context.extensionUri));
         // 6. Register Sidebar Tree Provider

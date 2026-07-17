@@ -69,28 +69,12 @@
         "title": "Flutter: Build AppBundle"
       },
       {
-        "command": "flutter-cli-assistant.buildWeb",
-        "title": "Flutter: Build Web"
-      },
-      {
         "command": "flutter-cli-assistant.flutterClean",
         "title": "Flutter: Clean"
       },
       {
-        "command": "flutter-cli-assistant.pubGet",
-        "title": "Flutter: Pub Get"
-      },
-      {
-        "command": "flutter-cli-assistant.pubUpgrade",
-        "title": "Flutter: Pub Upgrade"
-      },
-      {
         "command": "flutter-cli-assistant.doctor",
         "title": "Flutter: Doctor"
-      },
-      {
-        "command": "flutter-cli-assistant.devices",
-        "title": "Flutter: Devices"
       },
       {
         "command": "flutter-cli-assistant.showLogs",
