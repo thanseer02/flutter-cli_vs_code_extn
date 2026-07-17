@@ -16,6 +16,14 @@
       {
         "command": "flutter-cli-assistant.helloWorld",
         "title": "Flutter CLI: Hello World"
+      },
+      {
+        "command": "flutter-cli-assistant.clearLogs",
+        "title": "Flutter CLI: Clear Output Logs"
+      },
+      {
+        "command": "flutter-cli-assistant.exportLogs",
+        "title": "Flutter CLI: Export Output Logs"
       }
     ]
   },

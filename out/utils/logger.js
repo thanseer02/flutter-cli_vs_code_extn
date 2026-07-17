@@ -39,9 +39,11 @@ const constants_1 = require("../constants");
 /**
  * Logger implementation that writes to a VS Code OutputChannel.
  * This class wraps VS Code's OutputChannel to provide a standardized logging interface.
+ * It also maintains an in-memory buffer of logs for exporting.
  */
 class OutputChannelLogger {
     constructor() {
+        this.logBuffer = [];
         this.outputChannel = vscode.window.createOutputChannel(constants_1.CHANNELS.MAIN_OUTPUT);
     }
     /**
@@ -51,30 +53,75 @@ class OutputChannelLogger {
         const timestamp = new Date().toISOString();
         return `[${timestamp}] [${level}] ${message}`;
     }
+    append(message) {
+        this.outputChannel.appendLine(message);
+        this.logBuffer.push(message);
+        // Limit buffer size to prevent memory leaks (e.g. max 10000 lines)
+        if (this.logBuffer.length > 10000) {
+            this.logBuffer.shift();
+        }
+    }
     info(message) {
-        this.outputChannel.appendLine(this.formatMessage('INFO', message));
+        this.append(this.formatMessage('INFO', message));
     }
     warn(message) {
-        this.outputChannel.appendLine(this.formatMessage('WARN', message));
+        this.append(this.formatMessage('WARN', message));
     }
     error(message, error) {
-        this.outputChannel.appendLine(this.formatMessage('ERROR', message));
+        this.append(this.formatMessage('ERROR', message));
         if (error) {
-            this.outputChannel.appendLine(error.toString());
+            const errorStr = error.toString();
+            this.outputChannel.appendLine(errorStr);
+            this.logBuffer.push(errorStr);
             if (error.stack) {
                 this.outputChannel.appendLine(error.stack);
+                this.logBuffer.push(error.stack);
             }
         }
     }
     debug(message) {
-        // In a real extension, we might check a setting to see if debug logging is enabled.
-        this.outputChannel.appendLine(this.formatMessage('DEBUG', message));
+        this.append(this.formatMessage('DEBUG', message));
     }
     /**
      * Brings the Output Channel to the foreground in the VS Code UI.
      */
     show() {
         this.outputChannel.show();
+    }
+    /**
+     * Clears the Output Channel and the internal log buffer.
+     */
+    clear() {
+        this.outputChannel.clear();
+        this.logBuffer = [];
+        this.info('Logs cleared.');
+    }
+    /**
+     * Exports the log buffer to a file selected by the user.
+     */
+    async exportLogs() {
+        if (this.logBuffer.length === 0) {
+            vscode.window.showInformationMessage('No logs to export.');
+            return;
+        }
+        const uri = await vscode.window.showSaveDialog({
+            defaultUri: vscode.Uri.file('flutter_assistant_logs.txt'),
+            filters: {
+                'Text Files': ['txt'],
+                'All Files': ['*']
+            },
+            title: 'Export Flutter Assistant Logs'
+        });
+        if (uri) {
+            try {
+                const content = this.logBuffer.join('\n');
+                await vscode.workspace.fs.writeFile(uri, Buffer.from(content, 'utf8'));
+                vscode.window.showInformationMessage('Logs exported successfully.');
+            }
+            catch (error) {
+                vscode.window.showErrorMessage(`Failed to export logs: ${error.message}`);
+            }
+        }
     }
 }
 exports.OutputChannelLogger = OutputChannelLogger;

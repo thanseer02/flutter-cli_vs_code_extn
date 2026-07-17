@@ -12,6 +12,8 @@ export interface ILogger {
     error(message: string, error?: any): void;
     debug(message: string): void;
     show(): void;
+    clear(): void;
+    exportLogs(): Promise<void>;
 }
 
 /**

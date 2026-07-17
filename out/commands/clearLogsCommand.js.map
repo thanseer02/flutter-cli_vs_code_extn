@@ -1,0 +1,1 @@
+{"version":3,"file":"clearLogsCommand.js","sourceRoot":"","sources":["../../src/commands/clearLogsCommand.ts"],"names":[],"mappings":";;;AACA,4CAAwC;AACxC,mEAAgE;AAEhE;;GAEG;AACH,MAAa,gBAAgB;IAA7B;QACoB,OAAE,GAAG,oBAAQ,CAAC,UAAU,CAAC;IAM7C,CAAC;IAJG,KAAK,CAAC,OAAO;QACT,MAAM,MAAM,GAAG,mCAAgB,CAAC,GAAG,CAAU,QAAQ,CAAC,CAAC;QACvD,MAAM,CAAC,KAAK,EAAE,CAAC;IACnB,CAAC;CACJ;AAPD,4CAOC"}

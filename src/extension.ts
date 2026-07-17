@@ -3,6 +3,8 @@ import { OutputChannelLogger } from './utils/logger';
 import { serviceContainer } from './services/serviceContainer';
 import { CommandManager } from './commands/commandManager';
 import { HelloWorldCommand } from './commands/helloWorldCommand';
+import { ClearLogsCommand } from './commands/clearLogsCommand';
+import { ExportLogsCommand } from './commands/exportLogsCommand';
 import { ILogger, IProcessManager, IFlutterService } from './types';
 import { ProcessManager } from './services/terminal/processManager';
 import { FlutterService } from './services/flutter/flutterService';
@@ -33,6 +35,8 @@ export function activate(context: vscode.ExtensionContext) {
 
         // 4. Register Commands
         commandManager.registerCommand(context, new HelloWorldCommand());
+        commandManager.registerCommand(context, new ClearLogsCommand());
+        commandManager.registerCommand(context, new ExportLogsCommand());
 
         logger.info('Flutter CLI Assistant activated successfully.');
     } catch (error: any) {

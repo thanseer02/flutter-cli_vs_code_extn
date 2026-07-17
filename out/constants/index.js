@@ -11,6 +11,8 @@ exports.COMMANDS = {
     HELLO_WORLD: `${exports.EXTENSION_ID}.helloWorld`,
     BUILD_APK: `${exports.EXTENSION_ID}.buildApk`,
     FLUTTER_CLEAN: `${exports.EXTENSION_ID}.flutterClean`,
+    CLEAR_LOGS: `${exports.EXTENSION_ID}.clearLogs`,
+    EXPORT_LOGS: `${exports.EXTENSION_ID}.exportLogs`,
     // Add more commands here as we build them out
 };
 exports.CHANNELS = {

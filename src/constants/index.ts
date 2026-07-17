@@ -9,6 +9,8 @@ export const COMMANDS = {
     HELLO_WORLD: `${EXTENSION_ID}.helloWorld`,
     BUILD_APK: `${EXTENSION_ID}.buildApk`,
     FLUTTER_CLEAN: `${EXTENSION_ID}.flutterClean`,
+    CLEAR_LOGS: `${EXTENSION_ID}.clearLogs`,
+    EXPORT_LOGS: `${EXTENSION_ID}.exportLogs`,
     // Add more commands here as we build them out
 };
 

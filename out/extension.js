@@ -40,6 +40,8 @@ const logger_1 = require("./utils/logger");
 const serviceContainer_1 = require("./services/serviceContainer");
 const commandManager_1 = require("./commands/commandManager");
 const helloWorldCommand_1 = require("./commands/helloWorldCommand");
+const clearLogsCommand_1 = require("./commands/clearLogsCommand");
+const exportLogsCommand_1 = require("./commands/exportLogsCommand");
 const processManager_1 = require("./services/terminal/processManager");
 const flutterService_1 = require("./services/flutter/flutterService");
 /**
@@ -63,6 +65,8 @@ function activate(context) {
         context.subscriptions.push(commandManager);
         // 4. Register Commands
         commandManager.registerCommand(context, new helloWorldCommand_1.HelloWorldCommand());
+        commandManager.registerCommand(context, new clearLogsCommand_1.ClearLogsCommand());
+        commandManager.registerCommand(context, new exportLogsCommand_1.ExportLogsCommand());
         logger.info('Flutter CLI Assistant activated successfully.');
     }
     catch (error) {
