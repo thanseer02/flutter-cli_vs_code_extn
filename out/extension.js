@@ -93,6 +93,7 @@ function activate(context) {
         // Register generic Flutter commands
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.RUN, pipelineSteps_1.PIPELINES.run));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APK, pipelineSteps_1.PIPELINES.buildApk));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_IPA, pipelineSteps_1.PIPELINES.buildIpa));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APPBUNDLE, pipelineSteps_1.PIPELINES.buildAppBundle));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_WEB, pipelineSteps_1.PIPELINES.buildWeb));
         // Single-step commands registered as single-step pipelines

@@ -8,6 +8,7 @@ export const EXTENSION_NAME = 'Flutter CLI Assistant';
 export const COMMANDS = {
     HELLO_WORLD: `${EXTENSION_ID}.helloWorld`,
     BUILD_APK: `${EXTENSION_ID}.buildApk`,
+    BUILD_IPA: `${EXTENSION_ID}.buildIpa`,
     BUILD_APPBUNDLE: `${EXTENSION_ID}.buildAppBundle`,
     BUILD_WEB: `${EXTENSION_ID}.buildWeb`,
     FLUTTER_CLEAN: `${EXTENSION_ID}.flutterClean`,

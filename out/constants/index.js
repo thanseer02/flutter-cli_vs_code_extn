@@ -10,6 +10,7 @@ exports.EXTENSION_NAME = 'Flutter CLI Assistant';
 exports.COMMANDS = {
     HELLO_WORLD: `${exports.EXTENSION_ID}.helloWorld`,
     BUILD_APK: `${exports.EXTENSION_ID}.buildApk`,
+    BUILD_IPA: `${exports.EXTENSION_ID}.buildIpa`,
     BUILD_APPBUNDLE: `${exports.EXTENSION_ID}.buildAppBundle`,
     BUILD_WEB: `${exports.EXTENSION_ID}.buildWeb`,
     FLUTTER_CLEAN: `${exports.EXTENSION_ID}.flutterClean`,

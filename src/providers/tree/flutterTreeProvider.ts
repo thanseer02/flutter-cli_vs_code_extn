@@ -50,6 +50,7 @@ export class FlutterTreeProvider implements vscode.TreeDataProvider<FlutterSideb
             new FlutterSidebarItem('Dashboard', COMMANDS.SHOW_DASHBOARD, 'dashboard'),
             new FlutterSidebarItem('▶ Run', COMMANDS.RUN, 'play'),
             new FlutterSidebarItem('📦 Build APK', COMMANDS.BUILD_APK, 'package'),
+            new FlutterSidebarItem('🍏 Build IPA', COMMANDS.BUILD_IPA, 'package'),
             new FlutterSidebarItem('📦 Build AppBundle', COMMANDS.BUILD_APPBUNDLE, 'package'),
             new FlutterSidebarItem('🌐 Build Web', COMMANDS.BUILD_WEB, 'globe'),
             new FlutterSidebarItem('🧹 Clean', COMMANDS.FLUTTER_CLEAN, 'trash'),

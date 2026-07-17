@@ -60,6 +60,10 @@
         "title": "Flutter: Build APK"
       },
       {
+        "command": "flutter-cli-assistant.buildIpa",
+        "title": "Flutter: Build IPA"
+      },
+      {
         "command": "flutter-cli-assistant.buildAppBundle",
         "title": "Flutter: Build AppBundle"
       },

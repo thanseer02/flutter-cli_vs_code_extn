@@ -80,6 +80,7 @@ class FlutterTreeProvider {
             new FlutterSidebarItem('Dashboard', constants_1.COMMANDS.SHOW_DASHBOARD, 'dashboard'),
             new FlutterSidebarItem('▶ Run', constants_1.COMMANDS.RUN, 'play'),
             new FlutterSidebarItem('📦 Build APK', constants_1.COMMANDS.BUILD_APK, 'package'),
+            new FlutterSidebarItem('🍏 Build IPA', constants_1.COMMANDS.BUILD_IPA, 'package'),
             new FlutterSidebarItem('📦 Build AppBundle', constants_1.COMMANDS.BUILD_APPBUNDLE, 'package'),
             new FlutterSidebarItem('🌐 Build Web', constants_1.COMMANDS.BUILD_WEB, 'globe'),
             new FlutterSidebarItem('🧹 Clean', constants_1.COMMANDS.FLUTTER_CLEAN, 'trash'),
