@@ -31,3 +31,27 @@ export interface IServiceContainer {
     register<T>(name: string, service: T): void;
     get<T>(name: string): T;
 }
+
+import * as vscode from 'vscode';
+import { CommandOptions, CommandResult } from '../models/command';
+
+/**
+ * Interface for the Process Manager.
+ * Abstracts child_process spawning to allow easy mocking in tests.
+ */
+export interface IProcessManager {
+    /**
+     * Spawns a new process, streams its output to the logger, and returns the result.
+     */
+    spawnCommand(command: string, args: string[], options?: CommandOptions): Promise<CommandResult>;
+}
+
+/**
+ * Interface for the Flutter Service.
+ * Provides a domain-specific API for executing Flutter CLI commands.
+ */
+export interface IFlutterService {
+    buildApk(token?: vscode.CancellationToken): Promise<CommandResult>;
+    clean(token?: vscode.CancellationToken): Promise<CommandResult>;
+    pubGet(token?: vscode.CancellationToken): Promise<CommandResult>;
+}

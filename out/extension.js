@@ -40,6 +40,8 @@ const logger_1 = require("./utils/logger");
 const serviceContainer_1 = require("./services/serviceContainer");
 const commandManager_1 = require("./commands/commandManager");
 const helloWorldCommand_1 = require("./commands/helloWorldCommand");
+const processManager_1 = require("./services/terminal/processManager");
+const flutterService_1 = require("./services/flutter/flutterService");
 /**
  * This method is called when your extension is activated.
  * The extension is activated the very first time the command is executed.
@@ -49,8 +51,12 @@ function activate(context) {
     try {
         // 1. Initialize Core Services
         const logger = new logger_1.OutputChannelLogger();
+        const processManager = new processManager_1.ProcessManager();
+        const flutterService = new flutterService_1.FlutterService();
         // 2. Register Services in Dependency Injection Container
         serviceContainer_1.serviceContainer.register('Logger', logger);
+        serviceContainer_1.serviceContainer.register('ProcessManager', processManager);
+        serviceContainer_1.serviceContainer.register('FlutterService', flutterService);
         logger.info('Flutter CLI Assistant is starting up...');
         // 3. Initialize Command Manager
         const commandManager = new commandManager_1.CommandManager();

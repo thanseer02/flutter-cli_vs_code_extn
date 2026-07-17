@@ -3,7 +3,9 @@ import { OutputChannelLogger } from './utils/logger';
 import { serviceContainer } from './services/serviceContainer';
 import { CommandManager } from './commands/commandManager';
 import { HelloWorldCommand } from './commands/helloWorldCommand';
-import { ILogger } from './types';
+import { ILogger, IProcessManager, IFlutterService } from './types';
+import { ProcessManager } from './services/terminal/processManager';
+import { FlutterService } from './services/flutter/flutterService';
 
 /**
  * This method is called when your extension is activated.
@@ -15,9 +17,13 @@ export function activate(context: vscode.ExtensionContext) {
     try {
         // 1. Initialize Core Services
         const logger = new OutputChannelLogger();
+        const processManager = new ProcessManager();
+        const flutterService = new FlutterService();
         
         // 2. Register Services in Dependency Injection Container
         serviceContainer.register<ILogger>('Logger', logger);
+        serviceContainer.register<IProcessManager>('ProcessManager', processManager);
+        serviceContainer.register<IFlutterService>('FlutterService', flutterService);
 
         logger.info('Flutter CLI Assistant is starting up...');
 
