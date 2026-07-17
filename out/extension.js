@@ -44,6 +44,7 @@ const clearLogsCommand_1 = require("./commands/clearLogsCommand");
 const exportLogsCommand_1 = require("./commands/exportLogsCommand");
 const processManager_1 = require("./services/terminal/processManager");
 const flutterService_1 = require("./services/flutter/flutterService");
+const workspaceService_1 = require("./services/workspace/workspaceService");
 /**
  * This method is called when your extension is activated.
  * The extension is activated the very first time the command is executed.
@@ -55,12 +56,16 @@ function activate(context) {
         const logger = new logger_1.OutputChannelLogger();
         const processManager = new processManager_1.ProcessManager();
         const flutterService = new flutterService_1.FlutterService();
+        const workspaceService = new workspaceService_1.WorkspaceService();
         // 2. Register Services in Dependency Injection Container
         serviceContainer_1.serviceContainer.register('Logger', logger);
         serviceContainer_1.serviceContainer.register('ProcessManager', processManager);
         serviceContainer_1.serviceContainer.register('FlutterService', flutterService);
+        serviceContainer_1.serviceContainer.register('WorkspaceService', workspaceService);
         logger.info('Flutter CLI Assistant is starting up...');
-        // 3. Initialize Command Manager
+        // 3. Validate Workspace
+        workspaceService.validateWorkspace();
+        // 4. Initialize Command Manager
         const commandManager = new commandManager_1.CommandManager();
         context.subscriptions.push(commandManager);
         // 4. Register Commands

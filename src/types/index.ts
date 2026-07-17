@@ -57,3 +57,13 @@ export interface IFlutterService {
     clean(token?: vscode.CancellationToken): Promise<CommandResult>;
     pubGet(token?: vscode.CancellationToken): Promise<CommandResult>;
 }
+
+/**
+ * Interface for the Workspace Service.
+ * Manages detection and state of the current Flutter workspace.
+ */
+export interface IWorkspaceService {
+    readonly isFlutterProject: boolean;
+    readonly onDidChangeProjectState: vscode.Event<boolean>;
+    validateWorkspace(): Promise<boolean>;
+}

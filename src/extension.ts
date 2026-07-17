@@ -5,9 +5,10 @@ import { CommandManager } from './commands/commandManager';
 import { HelloWorldCommand } from './commands/helloWorldCommand';
 import { ClearLogsCommand } from './commands/clearLogsCommand';
 import { ExportLogsCommand } from './commands/exportLogsCommand';
-import { ILogger, IProcessManager, IFlutterService } from './types';
+import { ILogger, IProcessManager, IFlutterService, IWorkspaceService } from './types';
 import { ProcessManager } from './services/terminal/processManager';
 import { FlutterService } from './services/flutter/flutterService';
+import { WorkspaceService } from './services/workspace/workspaceService';
 
 /**
  * This method is called when your extension is activated.
@@ -21,15 +22,20 @@ export function activate(context: vscode.ExtensionContext) {
         const logger = new OutputChannelLogger();
         const processManager = new ProcessManager();
         const flutterService = new FlutterService();
+        const workspaceService = new WorkspaceService();
         
         // 2. Register Services in Dependency Injection Container
         serviceContainer.register<ILogger>('Logger', logger);
         serviceContainer.register<IProcessManager>('ProcessManager', processManager);
         serviceContainer.register<IFlutterService>('FlutterService', flutterService);
+        serviceContainer.register<IWorkspaceService>('WorkspaceService', workspaceService);
 
         logger.info('Flutter CLI Assistant is starting up...');
+        
+        // 3. Validate Workspace
+        workspaceService.validateWorkspace();
 
-        // 3. Initialize Command Manager
+        // 4. Initialize Command Manager
         const commandManager = new CommandManager();
         context.subscriptions.push(commandManager);
 
