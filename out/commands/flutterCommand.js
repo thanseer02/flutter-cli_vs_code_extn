@@ -36,6 +36,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FlutterCommand = void 0;
 const vscode = __importStar(require("vscode"));
 const serviceContainer_1 = require("../services/serviceContainer");
+const errors_1 = require("../utils/errors");
+const analysisWebview_1 = require("../providers/webview/analysisWebview");
 /**
  * A generic command to execute any Flutter Service method.
  */
@@ -61,14 +63,25 @@ class FlutterCommand {
                 vscode.window.showInformationMessage(`✅ ${this.progressTitle} completed successfully.`);
             }
             catch (error) {
-                // If the error was a cancellation, we swallow it (or show a specific message)
+                // Check if it's a known cancellation
                 if (error.name === 'CommandCancelledError') {
                     vscode.window.showWarningMessage(`🛑 ${this.progressTitle} was cancelled.`);
+                    return;
                 }
-                else {
-                    // It's a real failure
-                    vscode.window.showErrorMessage(`❌ ${this.progressTitle} failed.`);
+                // If it's a CommandExecutionError, we have stdout/stderr to analyze
+                if (error instanceof errors_1.CommandExecutionError) {
+                    const analyzer = serviceContainer_1.serviceContainer.get('ErrorAnalyzerService');
+                    // Combine stdout and stderr since some tools write errors to stdout
+                    const rawLogs = `${error.stdout}\n${error.stderr}`;
+                    const analysis = analyzer.analyze(rawLogs);
+                    if (analysis) {
+                        vscode.window.showErrorMessage(`❌ ${this.progressTitle} failed: ${analysis.problem}`);
+                        analysisWebview_1.AnalysisWebview.render(analysis);
+                        return;
+                    }
                 }
+                // Fallback for unknown errors
+                vscode.window.showErrorMessage(`❌ ${this.progressTitle} failed.`);
             }
         });
     }

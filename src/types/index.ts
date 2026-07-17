@@ -75,3 +75,12 @@ export interface IWorkspaceService {
     readonly onDidChangeProjectState: vscode.Event<boolean>;
     validateWorkspace(): Promise<boolean>;
 }
+
+import { ErrorAnalysis } from '../models/analyzer';
+
+/**
+ * Interface for the Error Analyzer Service.
+ */
+export interface IErrorAnalyzerService {
+    analyze(rawLogs: string): ErrorAnalysis | null;
+}

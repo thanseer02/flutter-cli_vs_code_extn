@@ -49,6 +49,7 @@ const constants_1 = require("./constants");
 const processManager_1 = require("./services/terminal/processManager");
 const flutterService_1 = require("./services/flutter/flutterService");
 const workspaceService_1 = require("./services/workspace/workspaceService");
+const errorAnalyzerService_1 = require("./services/analyzer/errorAnalyzerService");
 const flutterTreeProvider_1 = require("./providers/tree/flutterTreeProvider");
 /**
  * This method is called when your extension is activated.
@@ -62,11 +63,13 @@ function activate(context) {
         const processManager = new processManager_1.ProcessManager();
         const flutterService = new flutterService_1.FlutterService();
         const workspaceService = new workspaceService_1.WorkspaceService();
+        const errorAnalyzerService = new errorAnalyzerService_1.ErrorAnalyzerService();
         // 2. Register Services in Dependency Injection Container
         serviceContainer_1.serviceContainer.register('Logger', logger);
         serviceContainer_1.serviceContainer.register('ProcessManager', processManager);
         serviceContainer_1.serviceContainer.register('FlutterService', flutterService);
         serviceContainer_1.serviceContainer.register('WorkspaceService', workspaceService);
+        serviceContainer_1.serviceContainer.register('ErrorAnalyzerService', errorAnalyzerService);
         logger.info('Flutter CLI Assistant is starting up...');
         // 3. Validate Workspace
         workspaceService.validateWorkspace();

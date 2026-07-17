@@ -9,10 +9,11 @@ import { ShowLogsCommand } from './commands/showLogsCommand';
 import { DoctorCommand } from './commands/doctorCommand';
 import { FlutterCommand } from './commands/flutterCommand';
 import { COMMANDS } from './constants';
-import { ILogger, IProcessManager, IFlutterService, IWorkspaceService } from './types';
+import { ILogger, IProcessManager, IFlutterService, IWorkspaceService, IErrorAnalyzerService } from './types';
 import { ProcessManager } from './services/terminal/processManager';
 import { FlutterService } from './services/flutter/flutterService';
 import { WorkspaceService } from './services/workspace/workspaceService';
+import { ErrorAnalyzerService } from './services/analyzer/errorAnalyzerService';
 import { FlutterTreeProvider } from './providers/tree/flutterTreeProvider';
 
 /**
@@ -28,12 +29,14 @@ export function activate(context: vscode.ExtensionContext) {
         const processManager = new ProcessManager();
         const flutterService = new FlutterService();
         const workspaceService = new WorkspaceService();
+        const errorAnalyzerService = new ErrorAnalyzerService();
         
         // 2. Register Services in Dependency Injection Container
         serviceContainer.register<ILogger>('Logger', logger);
         serviceContainer.register<IProcessManager>('ProcessManager', processManager);
         serviceContainer.register<IFlutterService>('FlutterService', flutterService);
         serviceContainer.register<IWorkspaceService>('WorkspaceService', workspaceService);
+        serviceContainer.register<IErrorAnalyzerService>('ErrorAnalyzerService', errorAnalyzerService);
 
         logger.info('Flutter CLI Assistant is starting up...');
         

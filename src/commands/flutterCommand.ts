@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
-import { ICommand, IFlutterService, ILogger } from '../types';
+import { ICommand, IFlutterService, ILogger, IErrorAnalyzerService } from '../types';
 import { serviceContainer } from '../services/serviceContainer';
+import { CommandExecutionError } from '../utils/errors';
+import { AnalysisWebview } from '../providers/webview/analysisWebview';
 
 export type FlutterAction = 'run' | 'buildApk' | 'buildAppBundle' | 'buildWeb' | 'clean' | 'pubGet' | 'pubUpgrade' | 'doctor' | 'devices';
 
@@ -31,13 +33,28 @@ export class FlutterCommand implements ICommand {
                 await flutterService[this.action](token);
                 vscode.window.showInformationMessage(`✅ ${this.progressTitle} completed successfully.`);
             } catch (error: any) {
-                // If the error was a cancellation, we swallow it (or show a specific message)
+                // Check if it's a known cancellation
                 if (error.name === 'CommandCancelledError') {
                     vscode.window.showWarningMessage(`🛑 ${this.progressTitle} was cancelled.`);
-                } else {
-                    // It's a real failure
-                    vscode.window.showErrorMessage(`❌ ${this.progressTitle} failed.`);
+                    return;
                 }
+
+                // If it's a CommandExecutionError, we have stdout/stderr to analyze
+                if (error instanceof CommandExecutionError) {
+                    const analyzer = serviceContainer.get<IErrorAnalyzerService>('ErrorAnalyzerService');
+                    // Combine stdout and stderr since some tools write errors to stdout
+                    const rawLogs = `${error.stdout}\n${error.stderr}`;
+                    const analysis = analyzer.analyze(rawLogs);
+
+                    if (analysis) {
+                        vscode.window.showErrorMessage(`❌ ${this.progressTitle} failed: ${analysis.problem}`);
+                        AnalysisWebview.render(analysis);
+                        return;
+                    }
+                }
+
+                // Fallback for unknown errors
+                vscode.window.showErrorMessage(`❌ ${this.progressTitle} failed.`);
             }
         });
     }
