@@ -147,14 +147,14 @@ class ConsoleWebview {
             </style>
         </head>
         <body>
-            <div class="toolbar">
-                <button id="clearBtn">Clear</button>
-                <button id="copyBtn">Copy All</button>
-                <button id="saveBtn">Save Log</button>
+            <div class="toolbar" role="toolbar" aria-label="Console Actions">
+                <button id="clearBtn" aria-label="Clear Console" tabindex="0">Clear</button>
+                <button id="copyBtn" aria-label="Copy All Logs" tabindex="0">Copy All</button>
+                <button id="saveBtn" aria-label="Save Logs to File" tabindex="0">Save Log</button>
                 <div style="flex-grow: 1;"></div>
-                <span style="font-size: 11px; opacity: 0.6; align-self: center;">Ctrl+F to Search</span>
+                <span style="font-size: 11px; opacity: 0.6; align-self: center;" aria-hidden="true">Ctrl+F to Search</span>
             </div>
-            <div class="terminal-container" id="terminal"></div>
+            <div class="terminal-container" id="terminal" role="log" aria-live="polite"></div>
 
             <script>
                 const vscode = acquireVsCodeApi();

@@ -27,7 +27,8 @@ export class ProcessManager implements IProcessManager {
             const childProcess = cp.spawn(command, args, {
                 cwd,
                 env: { ...process.env, ...options?.env },
-                shell: true, // Use shell to resolve paths correctly (e.g., flutter in PATH)
+                // Security Refactor: Removed shell: true to prevent injection. 
+                // We assume 'flutter' is in the system PATH.
             });
 
             let stdout = '';

@@ -60,7 +60,7 @@ export class DashboardWebview {
             : '<div class="device-item">No devices connected</div>';
 
         const recentCommandsHtml = data.recentCommands
-            .map(cmd => `<button class="action-btn" onclick="runAction('${cmd}')">${cmd}</button>`)
+            .map(cmd => `<button class="action-btn" onclick="runAction('${cmd}')" aria-label="Run ${cmd}" tabindex="0">${cmd}</button>`)
             .join('');
 
         return `<!DOCTYPE html>
@@ -158,8 +158,10 @@ export class DashboardWebview {
                     font-weight: 500;
                     text-align: center;
                 }
-                .action-btn:hover {
+                .action-btn:hover, .action-btn:focus {
                     background-color: var(--vscode-button-hoverBackground);
+                    outline: 1px solid var(--vscode-focusBorder);
+                    outline-offset: 2px;
                 }
             </style>
         </head>
