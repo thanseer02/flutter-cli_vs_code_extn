@@ -1,7 +1,8 @@
 # Flutter CLI Assistant
 
-[![Version](https://img.shields.io/visual-studio-marketplace/v/your-publisher-name.flutter-cli-assistant)](https://marketplace.visualstudio.com/items?itemName=your-publisher-name.flutter-cli-assistant)
-[![Installs](https://img.shields.io/visual-studio-marketplace/i/your-publisher-name.flutter-cli-assistant)](https://marketplace.visualstudio.com/items?itemName=your-publisher-name.flutter-cli-assistant)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/MuhammadThanseer.flutter-cli-assistant)](https://marketplace.visualstudio.com/items?itemName=MuhammadThanseer.flutter-cli-assistant)
+
+[![Installs](https://img.shields.io/visual-studio-marketplace/i/MuhammadThanseer.flutter-cli-assistant)](https://marketplace.visualstudio.com/items?itemName=MuhammadThanseer.flutter-cli-assistant)
 
 A production-quality VS Code extension that supercharges your Flutter developer productivity by providing a beautiful GUI dashboard, intelligent error diagnostics, live console streaming, and one-click access to common Flutter commands.
 
@@ -56,7 +57,7 @@ Currently, this extension does not require any manual settings configuration. It
 
 ## Known Issues
 
-See the [GitHub Issue Tracker](https://github.com/your-repo/flutter-cli-assistant/issues) for a list of known issues.
+See the [GitHub Issue Tracker](https://github.com/thanseer02/flutter-cli_vs_code_extn/issues) for a list of known issues.
 
 ## Release Notes
 
