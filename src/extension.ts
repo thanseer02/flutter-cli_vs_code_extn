@@ -19,6 +19,7 @@ import { ErrorAnalyzerService } from './services/analyzer/errorAnalyzerService';
 import { DashboardDataService } from './services/dashboard/dashboardDataService';
 import { PipelineExecutorService } from './services/pipeline/pipelineExecutorService';
 import { FlutterTreeProvider } from './providers/tree/flutterTreeProvider';
+import { AnalysisWebview } from './providers/webview/analysisWebview';
 import { PIPELINES, PIPELINE_STEPS } from './utils/pipelineSteps';
 
 /**
@@ -46,6 +47,14 @@ export function activate(context: vscode.ExtensionContext) {
         serviceContainer.register<IWorkspaceService>('WorkspaceService', workspaceService);
         serviceContainer.register<IErrorAnalyzerService>('ErrorAnalyzerService', errorAnalyzerService);
         serviceContainer.register<IDashboardDataService>('DashboardDataService', dashboardDataService);
+
+        // Subscribe to real-time errors
+        context.subscriptions.push(
+            errorAnalyzerService.onDidDetectError((analysis) => {
+                vscode.window.showErrorMessage(`❌ Issue Detected: ${analysis.problem}`);
+                AnalysisWebview.render(analysis);
+            })
+        );
 
         logger.info('Flutter CLI Assistant is starting up...');
         

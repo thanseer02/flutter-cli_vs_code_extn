@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { DoctorCategory } from '../../models/doctor';
+import { getNonce } from '../../utils/nonce';
 
 /**
  * Manages the Webview Panel for Flutter Doctor.
@@ -90,9 +91,9 @@ export class DoctorWebview {
             let detailsHtml = '';
             for (const detail of category.details) {
                 // Highlight warnings/errors in the text if they start with ! or x
-                let formattedDetail = detail;
+                let formattedDetail = this.escapeHtml(detail);
                 if (detail.startsWith('!') || detail.startsWith('✗') || detail.startsWith('x')) {
-                    formattedDetail = `<span style="color: ${color}; font-weight: bold;">${detail}</span>`;
+                    formattedDetail = `<span style="color: ${color}; font-weight: bold;">${this.escapeHtml(detail)}</span>`;
                 }
                 detailsHtml += `<li>${formattedDetail}</li>`;
             }
@@ -101,19 +102,23 @@ export class DoctorWebview {
                 <div class="card" style="border-left: 4px solid ${color};">
                     <div class="card-header">
                         ${statusHtml}
-                        <i class="codicon codicon-${icon} category-icon"></i>
-                        <span class="category-title">${category.title}</span>
+                        <h2 class="card-title">${this.escapeHtml(category.title)}</h2>
+                        <i class="codicon codicon-${icon} category-icon" style="color: ${color}; opacity: 0.5;"></i>
                     </div>
-                    ${detailsHtml ? `<ul class="details-list">${detailsHtml}</ul>` : ''}
+                    <ul class="details-list">
+                        ${detailsHtml}
+                    </ul>
                 </div>
             `;
         }
 
+        const nonce = getNonce();
         return `<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this._panel.webview.cspSource} 'unsafe-inline'; font-src ${this._panel.webview.cspSource}; script-src 'nonce-${nonce}';">
             <link href="${codiconsUri}" rel="stylesheet" />
             <title>Flutter Doctor</title>
             <style>
@@ -159,13 +164,12 @@ export class DoctorWebview {
                 .status-icon.error { color: var(--vscode-problemsErrorIcon-foreground); }
                 
                 .category-icon {
-                    margin-right: 8px;
+                    margin-left: auto;
                     font-size: 1.2em;
-                    color: var(--vscode-foreground);
-                    opacity: 0.8;
                 }
-                .category-title {
-                    flex-grow: 1;
+                .card-title {
+                    margin: 0;
+                    font-size: 1em;
                 }
                 .details-list {
                     list-style-type: none;
@@ -193,8 +197,20 @@ export class DoctorWebview {
             <div class="card-container">
                 ${cardsHtml}
             </div>
+            <script nonce="${nonce}">
+                // No inline logic allowed for production grade security without nonce
+            </script>
         </body>
         </html>`;
+    }
+
+    private escapeHtml(unsafe: string): string {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
     public dispose() {

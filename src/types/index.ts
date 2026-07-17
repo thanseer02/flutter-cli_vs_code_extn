@@ -99,7 +99,8 @@ import { ErrorAnalysis } from '../models/analyzer';
  * Interface for the Error Analyzer Service.
  */
 export interface IErrorAnalyzerService {
-    analyze(rawLogs: string): ErrorAnalysis | null;
+    analyze(rawLogs: string): import('../models/analyzer').ErrorAnalysis | null;
+    readonly onDidDetectError: import('vscode').Event<import('../models/analyzer').ErrorAnalysis>;
 }
 
 import { DashboardData } from '../models/dashboard';

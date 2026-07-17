@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { ILogger } from '../../types';
 import { serviceContainer } from '../../services/serviceContainer';
+import { getNonce } from '../../utils/nonce';
 
 /**
  * Manages the Webview Panel for the Live Console.
@@ -74,11 +75,13 @@ export class ConsoleWebview {
     }
 
     private getHtmlForWebview(): string {
+        const nonce = getNonce();
         return `<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' ${this._panel.webview.cspSource}; script-src 'nonce-${nonce}';">
             <title>Live Console</title>
             <style>
                 body {
@@ -141,11 +144,12 @@ export class ConsoleWebview {
             </div>
             <div class="terminal-container" id="terminal" role="log" aria-live="polite"></div>
 
-            <script>
+            <script nonce="${nonce}">
                 const vscode = acquireVsCodeApi();
-                const terminal = document.getElementById('terminal');
+                const logContainer = document.getElementById('log-container');
+                const autoScrollCheckbox = document.getElementById('auto-scroll');
                 let autoScroll = true;
-
+                
                 // Detect if user scrolled up manually
                 terminal.addEventListener('scroll', () => {
                     const isAtBottom = terminal.scrollHeight - terminal.clientHeight <= terminal.scrollTop + 5;

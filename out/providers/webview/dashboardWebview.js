@@ -35,6 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DashboardWebview = void 0;
 const vscode = __importStar(require("vscode"));
+const nonce_1 = require("../../utils/nonce");
 class DashboardWebview {
     constructor(panel) {
         this._disposables = [];
@@ -72,18 +73,20 @@ class DashboardWebview {
         this._panel.webview.html = this.getHtmlForWebview(data);
     }
     getHtmlForWebview(data) {
+        const nonce = (0, nonce_1.getNonce)();
         const codiconsUri = this._panel.webview.asWebviewUri(vscode.Uri.joinPath(vscode.extensions.getExtension('vscode.markdown-language-features').extensionUri, 'media', 'codicon.css'));
         const devicesHtml = data.devices.length > 0
-            ? data.devices.map(d => `<div class="device-item"><i class="codicon codicon-${d.isEmulator ? 'vm' : 'device-mobile'}"></i> ${d.name} (${d.id})</div>`).join('')
+            ? data.devices.map(d => `<div class="device-item"><i class="codicon codicon-${d.isEmulator ? 'vm' : 'device-mobile'}"></i> ${this.escapeHtml(d.name)} (${this.escapeHtml(d.id)})</div>`).join('')
             : '<div class="device-item">No devices connected</div>';
         const recentCommandsHtml = data.recentCommands
-            .map(cmd => `<button class="action-btn" onclick="runAction('${cmd}')" aria-label="Run ${cmd}" tabindex="0">${cmd}</button>`)
+            .map(cmd => `<button class="action-btn" onclick="runAction('${this.escapeHtml(cmd)}')" aria-label="Run ${this.escapeHtml(cmd)}" tabindex="0">${this.escapeHtml(cmd)}</button>`)
             .join('');
         return `<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this._panel.webview.cspSource} 'unsafe-inline'; font-src ${this._panel.webview.cspSource}; script-src 'nonce-${nonce}';">
             <link href="${codiconsUri}" rel="stylesheet" />
             <title>Flutter Dashboard</title>
             <style>
@@ -196,19 +199,20 @@ class DashboardWebview {
                     <h3><i class="codicon codicon-server-environment"></i> Environment</h3>
                     <div class="stat-row">
                         <span class="stat-label">Flutter SDK</span>
-                        <span class="stat-value">${data.flutterVersion}</span>
+                        <div class="stat-value">${this.escapeHtml(data.flutterVersion)}</div>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Dart SDK</span>
-                        <span class="stat-value">${data.dartVersion}</span>
+                        <div class="stat-label">Dart SDK</div>
+                        <div class="stat-value">${this.escapeHtml(data.dartVersion)}</div>
                     </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Dependencies</span>
-                        <span class="stat-value">${data.dependenciesCount} packages</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Last Build</span>
-                        <span class="stat-value" style="color: var(--vscode-testing-iconPassed);">${data.latestBuildStatus}</span>
+                </div>
+
+                <div class="card">
+                    <div class="card-title"><i class="codicon codicon-project"></i> Project Details</div>
+                    <div class="card-content">
+                        <div><strong>Name:</strong> ${this.escapeHtml(data.projectName)}</div>
+                        <div><strong>Branch:</strong> ${this.escapeHtml(data.gitBranch)}</div>
+                        <div><strong>Dependencies:</strong> ${data.dependenciesCount}</div>
                     </div>
                 </div>
 
@@ -229,17 +233,22 @@ class DashboardWebview {
                 </div>
             </div>
 
-            <script>
+            <script nonce="${nonce}">
                 const vscode = acquireVsCodeApi();
-                function runAction(actionName) {
-                    vscode.postMessage({
-                        command: 'runAction',
-                        action: actionName
-                    });
+                function runAction(action) {
+                    vscode.postMessage({ command: 'runAction', action: action });
                 }
             </script>
         </body>
         </html>`;
+    }
+    escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
     dispose() {
         DashboardWebview.currentPanel = undefined;

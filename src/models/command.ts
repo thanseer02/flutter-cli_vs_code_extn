@@ -20,4 +20,6 @@ export interface CommandOptions {
     cancellationToken?: import('vscode').CancellationToken;
     /** Environment variables to pass to the process. */
     env?: NodeJS.ProcessEnv;
+    /** Timeout in milliseconds before the process is forcefully killed. */
+    timeoutMs?: number;
 }

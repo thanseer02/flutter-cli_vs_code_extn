@@ -35,6 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnalysisWebview = void 0;
 const vscode = __importStar(require("vscode"));
+const nonce_1 = require("../../utils/nonce");
 class AnalysisWebview {
     constructor(panel) {
         this._disposables = [];
@@ -56,15 +57,19 @@ class AnalysisWebview {
         this._panel.webview.html = this.getHtmlForWebview(analysis);
     }
     getHtmlForWebview(analysis) {
-        const fixesHtml = analysis.fixes.map(fix => `<li>${fix}</li>`).join('');
+        const nonce = (0, nonce_1.getNonce)();
+        // Strict sanitization of user output could be implemented here using an HTML sanitizer,
+        // but for now we enforce CSP which prevents execution of injected scripts.
+        const fixesHtml = analysis.fixes.map(fix => `<li>${this.escapeHtml(fix)}</li>`).join('');
         const linksHtml = analysis.links.length > 0
-            ? `<h3>📚 Documentation</h3><ul>${analysis.links.map(link => `<li><a href="${link}">${link}</a></li>`).join('')}</ul>`
+            ? `<h3>📚 Documentation</h3><ul>${analysis.links.map(link => `<li><a href="${this.escapeHtml(link)}">${this.escapeHtml(link)}</a></li>`).join('')}</ul>`
             : '';
         return `<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this._panel.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
             <title>Error Analysis</title>
             <style>
                 body {
@@ -116,7 +121,7 @@ class AnalysisWebview {
         <body>
             <div class="container">
                 <div class="problem-header">
-                    ⚠️ Issue Detected: ${analysis.problem}
+                    ⚠️ Issue Detected: ${this.escapeHtml(analysis.problem)}
                 </div>
                 
                 <div class="section">
@@ -132,9 +137,21 @@ class AnalysisWebview {
                 </div>
 
                 ${linksHtml ? `<div class="section">${linksHtml}</div>` : ''}
+                </div>
             </div>
+            <script nonce="${nonce}">
+                // No inline logic allowed for production grade security without nonce
+            </script>
         </body>
         </html>`;
+    }
+    escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
     dispose() {
         AnalysisWebview.currentPanel = undefined;

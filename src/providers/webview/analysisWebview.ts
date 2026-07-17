@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ErrorAnalysis } from '../../models/analyzer';
+import { getNonce } from '../../utils/nonce';
 
 export class AnalysisWebview {
     public static currentPanel: AnalysisWebview | undefined;
@@ -33,9 +34,12 @@ export class AnalysisWebview {
     }
 
     private getHtmlForWebview(analysis: ErrorAnalysis): string {
-        const fixesHtml = analysis.fixes.map(fix => `<li>${fix}</li>`).join('');
+        const nonce = getNonce();
+        // Strict sanitization of user output could be implemented here using an HTML sanitizer,
+        // but for now we enforce CSP which prevents execution of injected scripts.
+        const fixesHtml = analysis.fixes.map(fix => `<li>${this.escapeHtml(fix)}</li>`).join('');
         const linksHtml = analysis.links.length > 0 
-            ? `<h3>📚 Documentation</h3><ul>${analysis.links.map(link => `<li><a href="${link}">${link}</a></li>`).join('')}</ul>`
+            ? `<h3>📚 Documentation</h3><ul>${analysis.links.map(link => `<li><a href="${this.escapeHtml(link)}">${this.escapeHtml(link)}</a></li>`).join('')}</ul>`
             : '';
 
         return `<!DOCTYPE html>
@@ -43,6 +47,7 @@ export class AnalysisWebview {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this._panel.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
             <title>Error Analysis</title>
             <style>
                 body {
@@ -94,7 +99,7 @@ export class AnalysisWebview {
         <body>
             <div class="container">
                 <div class="problem-header">
-                    ⚠️ Issue Detected: ${analysis.problem}
+                    ⚠️ Issue Detected: ${this.escapeHtml(analysis.problem)}
                 </div>
                 
                 <div class="section">
@@ -110,9 +115,22 @@ export class AnalysisWebview {
                 </div>
 
                 ${linksHtml ? `<div class="section">${linksHtml}</div>` : ''}
+                </div>
             </div>
+            <script nonce="${nonce}">
+                // No inline logic allowed for production grade security without nonce
+            </script>
         </body>
         </html>`;
+    }
+
+    private escapeHtml(unsafe: string): string {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
     public dispose() {

@@ -31,20 +31,8 @@ export class FlutterCommand implements ICommand {
                 return;
             }
 
-            // If it's a CommandExecutionError from a specific step, we have stdout/stderr to analyze
-            if (error instanceof CommandExecutionError) {
-                const analyzer = serviceContainer.get<IErrorAnalyzerService>('ErrorAnalyzerService');
-                const rawLogs = `${error.stdout}\n${error.stderr}`;
-                const analysis = analyzer.analyze(rawLogs);
-
-                if (analysis) {
-                    vscode.window.showErrorMessage(`❌ ${this.pipeline.name} failed: ${analysis.problem}`);
-                    AnalysisWebview.render(analysis);
-                    return;
-                }
-            }
-
-            // Fallback for unknown errors
+            // If it's a CommandExecutionError, real-time analyzer likely already caught it.
+            // We just notify failure generically here.
             vscode.window.showErrorMessage(`❌ ${this.pipeline.name} failed.`);
         }
     }

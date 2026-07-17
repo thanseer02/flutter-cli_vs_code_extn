@@ -54,6 +54,7 @@ const errorAnalyzerService_1 = require("./services/analyzer/errorAnalyzerService
 const dashboardDataService_1 = require("./services/dashboard/dashboardDataService");
 const pipelineExecutorService_1 = require("./services/pipeline/pipelineExecutorService");
 const flutterTreeProvider_1 = require("./providers/tree/flutterTreeProvider");
+const analysisWebview_1 = require("./providers/webview/analysisWebview");
 const pipelineSteps_1 = require("./utils/pipelineSteps");
 /**
  * This method is called when your extension is activated.
@@ -78,6 +79,11 @@ function activate(context) {
         serviceContainer_1.serviceContainer.register('WorkspaceService', workspaceService);
         serviceContainer_1.serviceContainer.register('ErrorAnalyzerService', errorAnalyzerService);
         serviceContainer_1.serviceContainer.register('DashboardDataService', dashboardDataService);
+        // Subscribe to real-time errors
+        context.subscriptions.push(errorAnalyzerService.onDidDetectError((analysis) => {
+            vscode.window.showErrorMessage(`❌ Issue Detected: ${analysis.problem}`);
+            analysisWebview_1.AnalysisWebview.render(analysis);
+        }));
         logger.info('Flutter CLI Assistant is starting up...');
         // 3. Validate Workspace
         workspaceService.validateWorkspace();

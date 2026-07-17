@@ -36,8 +36,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FlutterCommand = void 0;
 const vscode = __importStar(require("vscode"));
 const serviceContainer_1 = require("../services/serviceContainer");
-const errors_1 = require("../utils/errors");
-const analysisWebview_1 = require("../providers/webview/analysisWebview");
 /**
  * A generic command to execute a Flutter Build Pipeline.
  */
@@ -61,18 +59,8 @@ class FlutterCommand {
                 vscode.window.showWarningMessage(`🛑 ${this.pipeline.name} was cancelled.`);
                 return;
             }
-            // If it's a CommandExecutionError from a specific step, we have stdout/stderr to analyze
-            if (error instanceof errors_1.CommandExecutionError) {
-                const analyzer = serviceContainer_1.serviceContainer.get('ErrorAnalyzerService');
-                const rawLogs = `${error.stdout}\n${error.stderr}`;
-                const analysis = analyzer.analyze(rawLogs);
-                if (analysis) {
-                    vscode.window.showErrorMessage(`❌ ${this.pipeline.name} failed: ${analysis.problem}`);
-                    analysisWebview_1.AnalysisWebview.render(analysis);
-                    return;
-                }
-            }
-            // Fallback for unknown errors
+            // If it's a CommandExecutionError, real-time analyzer likely already caught it.
+            // We just notify failure generically here.
             vscode.window.showErrorMessage(`❌ ${this.pipeline.name} failed.`);
         }
     }
