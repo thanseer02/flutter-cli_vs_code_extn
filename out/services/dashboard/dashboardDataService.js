@@ -50,12 +50,15 @@ class DashboardDataService {
             throw new Error('No workspace folder open.');
         }
         // Run data fetching in parallel for speed
-        const [projectName, dependenciesCount, gitBranch, versions, devices] = await Promise.all([
+        const [projectName, dependenciesCount, gitBranch, versions, devices, appVersion, bundleName, baseUrl] = await Promise.all([
             this.getProjectName(cwd),
             this.getDependenciesCount(cwd),
             this.getGitBranch(cwd),
             this.getFlutterVersions(cwd),
-            this.getDevices(cwd)
+            this.getDevices(cwd),
+            this.getAppVersion(cwd),
+            this.getBundleName(cwd),
+            this.getBaseUrl(cwd)
         ]);
         return {
             projectName,
@@ -63,6 +66,10 @@ class DashboardDataService {
             gitBranch,
             flutterVersion: versions.flutter,
             dartVersion: versions.dart,
+            androidVersion: appVersion,
+            iosVersion: appVersion,
+            baseUrl,
+            bundleName,
             devices,
             // For now, we stub these out. In a real production app, we would use 
             // context.workspaceState to store and retrieve these arrays across sessions.
@@ -81,6 +88,70 @@ class DashboardDataService {
         catch {
             return 'Unknown';
         }
+    }
+    async getAppVersion(cwd) {
+        try {
+            const pubspecUri = vscode.Uri.joinPath(vscode.Uri.file(cwd), 'pubspec.yaml');
+            const data = await vscode.workspace.fs.readFile(pubspecUri);
+            const content = data.toString();
+            const match = content.match(/^version:\s*(.+)$/m);
+            return match ? match[1].trim() : 'Unknown';
+        }
+        catch {
+            return 'Unknown';
+        }
+    }
+    async getBundleName(cwd) {
+        try {
+            const buildGradleUri = vscode.Uri.joinPath(vscode.Uri.file(cwd), 'android', 'app', 'build.gradle');
+            const data = await vscode.workspace.fs.readFile(buildGradleUri);
+            const content = data.toString();
+            const applicationIdMatch = content.match(/applicationId\s+['"]([^'"]+)['"]/);
+            if (applicationIdMatch) {
+                return applicationIdMatch[1];
+            }
+            const namespaceMatch = content.match(/namespace\s+['"]([^'"]+)['"]/);
+            if (namespaceMatch) {
+                return namespaceMatch[1];
+            }
+        }
+        catch { }
+        try {
+            const pbxprojUri = vscode.Uri.joinPath(vscode.Uri.file(cwd), 'ios', 'Runner.xcodeproj', 'project.pbxproj');
+            const data = await vscode.workspace.fs.readFile(pbxprojUri);
+            const content = data.toString();
+            const bundleMatch = content.match(/PRODUCT_BUNDLE_IDENTIFIER\s*=\s*([^;]+);/);
+            if (bundleMatch) {
+                return bundleMatch[1].replace(/['"]/g, '').trim();
+            }
+        }
+        catch { }
+        return 'Unknown';
+    }
+    async getBaseUrl(cwd) {
+        try {
+            const envUri = vscode.Uri.joinPath(vscode.Uri.file(cwd), '.env');
+            try {
+                const data = await vscode.workspace.fs.readFile(envUri);
+                const content = data.toString();
+                const match = content.match(/^(?:BASE_URL|API_URL)\s*=\s*(.+)$/im);
+                if (match) {
+                    return match[1].replace(/['"]/g, '').trim();
+                }
+            }
+            catch { }
+            const files = await vscode.workspace.findFiles(new vscode.RelativePattern(cwd, 'lib/**/{*constants*,*config*,*api*,*env*,main}.dart'), null, 20);
+            for (const file of files) {
+                const data = await vscode.workspace.fs.readFile(file);
+                const content = data.toString();
+                const match = content.match(/(?:baseUrl|BASE_URL|apiUrl|API_URL)\s*[:=]\s*['"](http[^'"]+)['"]/i);
+                if (match) {
+                    return match[1].trim();
+                }
+            }
+        }
+        catch { }
+        return 'Not Found (Define in .env)';
     }
     async getDependenciesCount(cwd) {
         try {

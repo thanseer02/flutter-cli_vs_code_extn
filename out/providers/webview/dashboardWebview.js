@@ -208,11 +208,30 @@ class DashboardWebview {
                 </div>
 
                 <div class="card">
-                    <div class="card-title"><i class="codicon codicon-project"></i> Project Details</div>
-                    <div class="card-content">
-                        <div><strong>Name:</strong> ${this.escapeHtml(data.projectName)}</div>
-                        <div><strong>Branch:</strong> ${this.escapeHtml(data.gitBranch)}</div>
-                        <div><strong>Dependencies:</strong> ${data.dependenciesCount}</div>
+                    <h3><i class="codicon codicon-project"></i> Project Details</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Name</span>
+                        <div class="stat-value">${this.escapeHtml(data.projectName)}</div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Bundle</span>
+                        <div class="stat-value" style="word-break: break-all; text-align: right;">${this.escapeHtml(data.bundleName)}</div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Android Ver.</span>
+                        <div class="stat-value">${this.escapeHtml(data.androidVersion)}</div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">iOS Ver.</span>
+                        <div class="stat-value">${this.escapeHtml(data.iosVersion)}</div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">API Base URL</span>
+                        <div class="stat-value" style="word-break: break-all; max-width: 60%; text-align: right;">${this.escapeHtml(data.baseUrl)}</div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Dependencies</span>
+                        <div class="stat-value">${data.dependenciesCount}</div>
                     </div>
                 </div>
 
