@@ -16,9 +16,10 @@ export const COMMANDS = {
     DOCTOR: `${EXTENSION_ID}.doctor`,
     DEVICES: `${EXTENSION_ID}.devices`,
     RUN: `${EXTENSION_ID}.run`,
-    SHOW_LOGS: `${EXTENSION_ID}.showLogs`,
-    CLEAR_LOGS: `${EXTENSION_ID}.clearLogs`,
-    EXPORT_LOGS: `${EXTENSION_ID}.exportLogs`,
+    SHOW_LOGS: 'flutter-cli-assistant.showLogs',
+    CLEAR_LOGS: 'flutter-cli-assistant.clearLogs',
+    EXPORT_LOGS: 'flutter-cli-assistant.exportLogs',
+    SHOW_DASHBOARD: 'flutter-cli-assistant.showDashboard',
 };
 
 export const CHANNELS = {

@@ -47,6 +47,7 @@ export class FlutterTreeProvider implements vscode.TreeDataProvider<FlutterSideb
 
         // Return the root level items
         return Promise.resolve([
+            new FlutterSidebarItem('Dashboard', COMMANDS.SHOW_DASHBOARD, 'dashboard'),
             new FlutterSidebarItem('▶ Run', COMMANDS.RUN, 'play'),
             new FlutterSidebarItem('📦 Build APK', COMMANDS.BUILD_APK, 'package'),
             new FlutterSidebarItem('📦 Build AppBundle', COMMANDS.BUILD_APPBUNDLE, 'package'),

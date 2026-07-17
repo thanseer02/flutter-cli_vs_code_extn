@@ -18,9 +18,10 @@ exports.COMMANDS = {
     DOCTOR: `${exports.EXTENSION_ID}.doctor`,
     DEVICES: `${exports.EXTENSION_ID}.devices`,
     RUN: `${exports.EXTENSION_ID}.run`,
-    SHOW_LOGS: `${exports.EXTENSION_ID}.showLogs`,
-    CLEAR_LOGS: `${exports.EXTENSION_ID}.clearLogs`,
-    EXPORT_LOGS: `${exports.EXTENSION_ID}.exportLogs`,
+    SHOW_LOGS: 'flutter-cli-assistant.showLogs',
+    CLEAR_LOGS: 'flutter-cli-assistant.clearLogs',
+    EXPORT_LOGS: 'flutter-cli-assistant.exportLogs',
+    SHOW_DASHBOARD: 'flutter-cli-assistant.showDashboard',
 };
 exports.CHANNELS = {
     MAIN_OUTPUT: exports.EXTENSION_NAME

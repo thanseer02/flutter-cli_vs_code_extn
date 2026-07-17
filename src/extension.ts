@@ -7,13 +7,15 @@ import { ClearLogsCommand } from './commands/clearLogsCommand';
 import { ExportLogsCommand } from './commands/exportLogsCommand';
 import { ShowLogsCommand } from './commands/showLogsCommand';
 import { DoctorCommand } from './commands/doctorCommand';
+import { DashboardCommand } from './commands/dashboardCommand';
 import { FlutterCommand } from './commands/flutterCommand';
 import { COMMANDS } from './constants';
-import { ILogger, IProcessManager, IFlutterService, IWorkspaceService, IErrorAnalyzerService } from './types';
+import { ILogger, IProcessManager, IFlutterService, IWorkspaceService, IErrorAnalyzerService, IDashboardDataService } from './types';
 import { ProcessManager } from './services/terminal/processManager';
 import { FlutterService } from './services/flutter/flutterService';
 import { WorkspaceService } from './services/workspace/workspaceService';
 import { ErrorAnalyzerService } from './services/analyzer/errorAnalyzerService';
+import { DashboardDataService } from './services/dashboard/dashboardDataService';
 import { FlutterTreeProvider } from './providers/tree/flutterTreeProvider';
 
 /**
@@ -30,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
         const flutterService = new FlutterService();
         const workspaceService = new WorkspaceService();
         const errorAnalyzerService = new ErrorAnalyzerService();
+        const dashboardDataService = new DashboardDataService();
         
         // 2. Register Services in Dependency Injection Container
         serviceContainer.register<ILogger>('Logger', logger);
@@ -37,6 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
         serviceContainer.register<IFlutterService>('FlutterService', flutterService);
         serviceContainer.register<IWorkspaceService>('WorkspaceService', workspaceService);
         serviceContainer.register<IErrorAnalyzerService>('ErrorAnalyzerService', errorAnalyzerService);
+        serviceContainer.register<IDashboardDataService>('DashboardDataService', dashboardDataService);
 
         logger.info('Flutter CLI Assistant is starting up...');
         
@@ -52,6 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
         commandManager.registerCommand(context, new ClearLogsCommand());
         commandManager.registerCommand(context, new ExportLogsCommand());
         commandManager.registerCommand(context, new ShowLogsCommand(context.extensionUri));
+        commandManager.registerCommand(context, new DashboardCommand());
         
         // Register generic Flutter commands
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.RUN, 'run', 'Flutter Run'));

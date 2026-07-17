@@ -44,12 +44,14 @@ const clearLogsCommand_1 = require("./commands/clearLogsCommand");
 const exportLogsCommand_1 = require("./commands/exportLogsCommand");
 const showLogsCommand_1 = require("./commands/showLogsCommand");
 const doctorCommand_1 = require("./commands/doctorCommand");
+const dashboardCommand_1 = require("./commands/dashboardCommand");
 const flutterCommand_1 = require("./commands/flutterCommand");
 const constants_1 = require("./constants");
 const processManager_1 = require("./services/terminal/processManager");
 const flutterService_1 = require("./services/flutter/flutterService");
 const workspaceService_1 = require("./services/workspace/workspaceService");
 const errorAnalyzerService_1 = require("./services/analyzer/errorAnalyzerService");
+const dashboardDataService_1 = require("./services/dashboard/dashboardDataService");
 const flutterTreeProvider_1 = require("./providers/tree/flutterTreeProvider");
 /**
  * This method is called when your extension is activated.
@@ -64,12 +66,14 @@ function activate(context) {
         const flutterService = new flutterService_1.FlutterService();
         const workspaceService = new workspaceService_1.WorkspaceService();
         const errorAnalyzerService = new errorAnalyzerService_1.ErrorAnalyzerService();
+        const dashboardDataService = new dashboardDataService_1.DashboardDataService();
         // 2. Register Services in Dependency Injection Container
         serviceContainer_1.serviceContainer.register('Logger', logger);
         serviceContainer_1.serviceContainer.register('ProcessManager', processManager);
         serviceContainer_1.serviceContainer.register('FlutterService', flutterService);
         serviceContainer_1.serviceContainer.register('WorkspaceService', workspaceService);
         serviceContainer_1.serviceContainer.register('ErrorAnalyzerService', errorAnalyzerService);
+        serviceContainer_1.serviceContainer.register('DashboardDataService', dashboardDataService);
         logger.info('Flutter CLI Assistant is starting up...');
         // 3. Validate Workspace
         workspaceService.validateWorkspace();
@@ -81,6 +85,7 @@ function activate(context) {
         commandManager.registerCommand(context, new clearLogsCommand_1.ClearLogsCommand());
         commandManager.registerCommand(context, new exportLogsCommand_1.ExportLogsCommand());
         commandManager.registerCommand(context, new showLogsCommand_1.ShowLogsCommand(context.extensionUri));
+        commandManager.registerCommand(context, new dashboardCommand_1.DashboardCommand());
         // Register generic Flutter commands
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.RUN, 'run', 'Flutter Run'));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.BUILD_APK, 'buildApk', 'Building APK'));

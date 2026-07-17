@@ -77,6 +77,7 @@ class FlutterTreeProvider {
         }
         // Return the root level items
         return Promise.resolve([
+            new FlutterSidebarItem('Dashboard', constants_1.COMMANDS.SHOW_DASHBOARD, 'dashboard'),
             new FlutterSidebarItem('▶ Run', constants_1.COMMANDS.RUN, 'play'),
             new FlutterSidebarItem('📦 Build APK', constants_1.COMMANDS.BUILD_APK, 'package'),
             new FlutterSidebarItem('📦 Build AppBundle', constants_1.COMMANDS.BUILD_APPBUNDLE, 'package'),

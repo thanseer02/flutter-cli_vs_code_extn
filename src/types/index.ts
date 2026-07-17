@@ -84,3 +84,12 @@ import { ErrorAnalysis } from '../models/analyzer';
 export interface IErrorAnalyzerService {
     analyze(rawLogs: string): ErrorAnalysis | null;
 }
+
+import { DashboardData } from '../models/dashboard';
+
+/**
+ * Interface for the Dashboard Data Service.
+ */
+export interface IDashboardDataService {
+    getDashboardData(): Promise<DashboardData>;
+}

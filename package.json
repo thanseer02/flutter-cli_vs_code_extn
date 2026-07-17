@@ -28,6 +28,11 @@
         "icon": "$(save)"
       },
       {
+        "command": "flutter-cli-assistant.showDashboard",
+        "title": "Flutter Assistant: Show Dashboard",
+        "icon": "$(dashboard)"
+      },
+      {
         "command": "flutter-cli-assistant.run",
         "title": "Flutter: Run"
       },
