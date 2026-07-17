@@ -54,6 +54,8 @@ const errorAnalyzerService_1 = require("./services/analyzer/errorAnalyzerService
 const dashboardDataService_1 = require("./services/dashboard/dashboardDataService");
 const pipelineExecutorService_1 = require("./services/pipeline/pipelineExecutorService");
 const flutterTreeProvider_1 = require("./providers/tree/flutterTreeProvider");
+const dashboardTreeProvider_1 = require("./providers/tree/dashboardTreeProvider");
+const dashboardViewModel_1 = require("./services/dashboard/dashboardViewModel");
 const analysisWebview_1 = require("./providers/webview/analysisWebview");
 const pipelineSteps_1 = require("./utils/pipelineSteps");
 /**
@@ -107,13 +109,19 @@ function activate(context) {
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.PUB_GET, { name: 'Pub Get', steps: [pipelineSteps_1.PIPELINE_STEPS.pubGet] }));
         // commandManager.registerCommand(context, new FlutterCommand(COMMANDS.PUB_UPGRADE, { name: 'Pub Upgrade', steps: [{ name: 'Upgrading packages...', commandType: 'flutter', args: ['pub', 'upgrade'] }] }));
         commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.DEVICES, { name: 'Devices', steps: [{ name: 'Fetching devices...', commandType: 'flutter', args: ['devices'] }] }));
+        commandManager.registerCommand(context, new flutterCommand_1.FlutterCommand(constants_1.COMMANDS.GENERATE_JSON_SERIALIZABLE, pipelineSteps_1.PIPELINES.generateJsonSerializable));
         commandManager.registerCommand(context, new doctorCommand_1.DoctorCommand(context.extensionUri));
-        // 6. Register Sidebar Tree Provider
+        // 6. Register Sidebar Tree Providers
         const flutterTreeProvider = new flutterTreeProvider_1.FlutterTreeProvider();
         vscode.window.registerTreeDataProvider('flutter-cli-assistant.sidebar', flutterTreeProvider);
+        const dashboardViewModel = new dashboardViewModel_1.DashboardViewModel();
+        const dashboardTreeProvider = new dashboardTreeProvider_1.DashboardTreeProvider(dashboardViewModel);
+        vscode.window.registerTreeDataProvider('flutter-cli-assistant.projectDashboard', dashboardTreeProvider);
+        context.subscriptions.push({ dispose: () => dashboardViewModel.dispose() });
         // Re-render tree when workspace state changes (optional, but good practice)
         workspaceService.onDidChangeProjectState(() => {
             flutterTreeProvider.refresh();
+            dashboardTreeProvider.refresh();
         });
         logger.info('Flutter CLI Assistant activated successfully.');
     }

@@ -23,6 +23,7 @@ exports.COMMANDS = {
     CLEAR_LOGS: 'flutter-cli-assistant.clearLogs',
     EXPORT_LOGS: 'flutter-cli-assistant.exportLogs',
     SHOW_DASHBOARD: 'flutter-cli-assistant.showDashboard',
+    GENERATE_JSON_SERIALIZABLE: 'flutter-cli-assistant.generateJsonSerializable',
 };
 exports.CHANNELS = {
     MAIN_OUTPUT: exports.EXTENSION_NAME

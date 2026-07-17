@@ -37,17 +37,20 @@ exports.FlutterTreeProvider = exports.FlutterSidebarItem = void 0;
 const vscode = __importStar(require("vscode"));
 const constants_1 = require("../../constants");
 class FlutterSidebarItem extends vscode.TreeItem {
-    constructor(label, commandId, iconName) {
-        super(label, vscode.TreeItemCollapsibleState.None);
+    constructor(label, iconName, collapsibleState, commandId, children) {
+        super(label, collapsibleState);
         this.label = label;
-        this.commandId = commandId;
         this.iconName = iconName;
-        // Use a built-in VS Code ThemeIcon (Octicons)
+        this.collapsibleState = collapsibleState;
+        this.commandId = commandId;
+        this.children = children;
         this.iconPath = new vscode.ThemeIcon(iconName);
-        this.command = {
-            command: commandId,
-            title: label,
-        };
+        if (commandId) {
+            this.command = {
+                command: commandId,
+                title: label,
+            };
+        }
     }
 }
 exports.FlutterSidebarItem = FlutterSidebarItem;
@@ -56,44 +59,31 @@ exports.FlutterSidebarItem = FlutterSidebarItem;
  */
 class FlutterTreeProvider {
     constructor() {
-        // An event to signal that the tree data has changed.
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
     }
-    /**
-     * Called by VS Code to get the UI representation of a node.
-     */
     getTreeItem(element) {
         return element;
     }
-    /**
-     * Called by VS Code to get the children of a node.
-     * Since our sidebar is a flat list of commands, we only return items when element is undefined (root).
-     */
     getChildren(element) {
         if (element) {
-            // No nested items
-            return Promise.resolve([]);
+            return Promise.resolve(element.children || []);
         }
         const items = [
-            new FlutterSidebarItem('Dashboard', constants_1.COMMANDS.SHOW_DASHBOARD, 'layout'),
-            // new FlutterSidebarItem('Run App', COMMANDS.RUN, 'play'),
-            new FlutterSidebarItem('Build APK', constants_1.COMMANDS.BUILD_APK, 'archive'),
-            new FlutterSidebarItem('Build App Bundle', constants_1.COMMANDS.BUILD_APPBUNDLE, 'package')
+            new FlutterSidebarItem('Dashboard', 'layout', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.SHOW_DASHBOARD),
+            new FlutterSidebarItem('Build APK', 'archive', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.BUILD_APK),
+            new FlutterSidebarItem('Build App Bundle', 'package', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.BUILD_APPBUNDLE)
         ];
         if (process.platform === 'darwin') {
-            items.push(new FlutterSidebarItem('Build IPA', constants_1.COMMANDS.BUILD_IPA, 'device-mobile'));
+            items.push(new FlutterSidebarItem('Build IPA', 'device-mobile', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.BUILD_IPA));
         }
-        items.push(
-        // new FlutterSidebarItem('Build Web', COMMANDS.BUILD_WEB, 'globe'),
-        new FlutterSidebarItem('Clean', constants_1.COMMANDS.FLUTTER_CLEAN, 'clear-all'), new FlutterSidebarItem('Pub Get', constants_1.COMMANDS.PUB_GET, 'repo-pull'), 
-        // new FlutterSidebarItem('Pub Upgrade', COMMANDS.PUB_UPGRADE, 'arrow-up'),
-        new FlutterSidebarItem('Doctor', constants_1.COMMANDS.DOCTOR, 'heart'), new FlutterSidebarItem('Devices', constants_1.COMMANDS.DEVICES, 'vm'), new FlutterSidebarItem('Logs', constants_1.COMMANDS.SHOW_LOGS, 'terminal'));
+        items.push(new FlutterSidebarItem('Clean', 'clear-all', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.FLUTTER_CLEAN), new FlutterSidebarItem('Pub Get', 'repo-pull', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.PUB_GET), new FlutterSidebarItem('Doctor', 'heart', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.DOCTOR), new FlutterSidebarItem('Devices', 'vm', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.DEVICES), new FlutterSidebarItem('Logs', 'terminal', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.SHOW_LOGS), 
+        // Code Generation Folder
+        new FlutterSidebarItem('Code Generation', 'puzzle', vscode.TreeItemCollapsibleState.Expanded, undefined, [
+            new FlutterSidebarItem('Generate JSON Serializable', 'file-code', vscode.TreeItemCollapsibleState.None, constants_1.COMMANDS.GENERATE_JSON_SERIALIZABLE)
+        ]));
         return Promise.resolve(items);
     }
-    /**
-     * Call this to refresh the view programmatically.
-     */
     refresh() {
         this._onDidChangeTreeData.fire();
     }

@@ -79,6 +79,10 @@
       {
         "command": "flutter-cli-assistant.showLogs",
         "title": "Flutter: Show Logs"
+      },
+      {
+        "command": "flutter-cli-assistant.generateJsonSerializable",
+        "title": "Flutter: Generate JSON Serializable"
       }
     ],
     "viewsContainers": {
@@ -92,6 +96,11 @@
     },
     "views": {
       "flutter-cli-assistant-explorer": [
+        {
+          "id": "flutter-cli-assistant.projectDashboard",
+          "name": "Project",
+          "when": "flutter-cli-assistant.isFlutterProject"
+        },
         {
           "id": "flutter-cli-assistant.sidebar",
           "name": "Commands",

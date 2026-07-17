@@ -1,6 +1,6 @@
 export interface PipelineStep {
     name: string;
-    commandType: 'flutter' | 'shell';
+    commandType: 'flutter' | 'dart' | 'shell';
     args: string[];
     cwd?: string; // e.g., 'ios' for pod install
 }

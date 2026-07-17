@@ -51,5 +51,13 @@ exports.PIPELINES = {
             { name: 'Running...', commandType: 'flutter', args: ['run'] }
         ]
     },
+    generateJsonSerializable: {
+        name: 'Generate JSON Serializable',
+        steps: [
+            exports.PIPELINE_STEPS.clean,
+            exports.PIPELINE_STEPS.pubGet,
+            { name: 'Generating...', commandType: 'dart', args: ['run', 'build_runner', 'build', '--delete-conflicting-outputs'] }
+        ]
+    },
 };
 //# sourceMappingURL=pipelineSteps.js.map

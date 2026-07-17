@@ -81,7 +81,9 @@ class PipelineExecutorService {
                 // Update Logger
                 const commandStr = step.commandType === 'flutter'
                     ? `flutter ${step.args.join(' ')}`
-                    : `${step.args.join(' ')}`;
+                    : step.commandType === 'dart'
+                        ? `dart ${step.args.join(' ')}`
+                        : `${step.args.join(' ')}`;
                 this.logger.info(`[${i + 1}/${totalSteps}] ${commandStr}`);
                 // Determine working directory for this specific step
                 let stepCwd = rootCwd;
@@ -91,6 +93,12 @@ class PipelineExecutorService {
                 try {
                     if (step.commandType === 'flutter') {
                         await this.flutterExecutionService.run(step.args, {
+                            cwd: stepCwd,
+                            cancellationToken: cancellationTokenSource.token
+                        });
+                    }
+                    else if (step.commandType === 'dart') {
+                        await this.flutterExecutionService.runDart(step.args, {
                             cwd: stepCwd,
                             cancellationToken: cancellationTokenSource.token
                         });
@@ -111,6 +119,13 @@ class PipelineExecutorService {
                     // Friendly CocoaPods check
                     if (step.commandType === 'shell' && step.args[0] === 'pod' && error.message && error.message.includes('ENOENT')) {
                         vscode.window.showErrorMessage('CocoaPods is not installed or not in your PATH. Please install it using: sudo gem install cocoapods');
+                    }
+                    // Friendly build_runner check
+                    if (step.commandType === 'dart' && step.args.includes('build_runner')) {
+                        this.logger.error('\nError: build_runner not found or project is missing required packages.');
+                        this.logger.error('Recommendation: Add the following to your pubspec.yaml dev_dependencies:\n');
+                        this.logger.error('dev_dependencies:\n  build_runner:\n  json_serializable:\n');
+                        vscode.window.showErrorMessage('Code Generation Failed: Missing build_runner or json_serializable. Check logs for details.');
                     }
                     throw error; // Abort pipeline
                 }

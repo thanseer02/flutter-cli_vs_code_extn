@@ -100,6 +100,47 @@ class FlutterExecutionService {
         const fullCommand = `${resolved.command} ${resolved.args.concat(args).join(' ')}`;
         return exec(fullCommand, { cwd, env: { ...process.env, ...options?.env } });
     }
+    async resolveDartCommand(cwd) {
+        // Priority 1: Check for FVM
+        if (cwd) {
+            try {
+                const fvmConfigPath = vscode.Uri.joinPath(vscode.Uri.file(cwd), '.fvm', 'fvm_config.json');
+                await vscode.workspace.fs.stat(fvmConfigPath);
+                return {
+                    command: 'fvm',
+                    args: ['dart']
+                };
+            }
+            catch { }
+        }
+        // Priority 2: Custom SDK path
+        const config = vscode.workspace.getConfiguration('flutter-cli-assistant');
+        const customPath = config.get('flutterSdkPath');
+        if (customPath && customPath.trim().length > 0) {
+            const dartBinary = process.platform === 'win32' ? 'dart.bat' : 'dart';
+            return {
+                command: path.join(customPath.trim(), 'bin', dartBinary),
+                args: []
+            };
+        }
+        // Priority 3: System default
+        return {
+            command: 'dart',
+            args: []
+        };
+    }
+    async runDart(args, options) {
+        const cwd = options?.cwd || (vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined);
+        const resolved = await this.resolveDartCommand(cwd);
+        const finalArgs = [...resolved.args, ...args];
+        return this.processManager.spawnCommand(resolved.command, finalArgs, options);
+    }
+    async runDartRaw(args, options) {
+        const cwd = options?.cwd || (vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined);
+        const resolved = await this.resolveDartCommand(cwd);
+        const fullCommand = `${resolved.command} ${resolved.args.concat(args).join(' ')}`;
+        return exec(fullCommand, { cwd, env: { ...process.env, ...options?.env } });
+    }
 }
 exports.FlutterExecutionService = FlutterExecutionService;
 //# sourceMappingURL=flutterExecutionService.js.map

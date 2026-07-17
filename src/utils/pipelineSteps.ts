@@ -55,4 +55,13 @@ export const PIPELINES = {
             { name: 'Running...', commandType: 'flutter', args: ['run'] }
         ]
     } as CommandPipeline,
+
+    generateJsonSerializable: {
+        name: 'Generate JSON Serializable',
+        steps: [
+            PIPELINE_STEPS.clean,
+            PIPELINE_STEPS.pubGet,
+            { name: 'Generating...', commandType: 'dart', args: ['run', 'build_runner', 'build', '--delete-conflicting-outputs'] }
+        ]
+    } as CommandPipeline,
 };

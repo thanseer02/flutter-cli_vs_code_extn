@@ -27,10 +27,11 @@ A production-quality VS Code extension that supercharges your Flutter developmen
 
 | Feature | Description |
 |---|---|
-| 📊 **Project Dashboard** | A beautiful, modern, theme-aware Webview providing a bird's-eye view of your project, dependencies, connected devices, and quick actions. |
-| 🛠️ **One-Click Actions** | Execute `flutter run`, `build apk`, `build appbundle`, `build web`, `clean`, `pub get`, and `pub upgrade` directly from the VS Code Sidebar without typing a single command. |
+| 📊 **Real-time Project Dashboard** | A natively integrated Sidebar Tree View providing a bird's-eye view of your project, detecting Android/iOS versions, package names, active flavors, and API configurations dynamically in real-time. |
+| 🧩 **Code Generation** | Automatically generate JSON Serializable files through an intelligent pipeline that resolves the correct FVM or System `dart` execution paths. |
+| 🛠️ **One-Click Actions** | Execute `flutter run`, `build apk`, `build appbundle`, `build web`, `clean`, and `pub get` directly from the VS Code Sidebar without typing a single command. |
 | 🖥️ **Terminal Streaming Console** | A dedicated Live Console Webview with auto-scroll, colorized tags, and native search. |
-| 🧠 **Error Analyzer** | Automatically intercepts build failures, diagnoses common issues (Gradle, Java JDK mismatch, CocoaPods, Android SDK, etc.), and offers human-readable explanations with one-click fixes. |
+| 🧠 **Error Analyzer** | Automatically intercepts build failures, diagnoses common issues (Gradle, CocoaPods, Android SDK), and offers human-readable explanations. |
 | 🩺 **Visual Flutter Doctor** | Parses raw `flutter doctor` output into a clean, icon-rich, easy-to-read dashboard. |
 
 ---

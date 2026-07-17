@@ -19,6 +19,8 @@ import { ErrorAnalyzerService } from './services/analyzer/errorAnalyzerService';
 import { DashboardDataService } from './services/dashboard/dashboardDataService';
 import { PipelineExecutorService } from './services/pipeline/pipelineExecutorService';
 import { FlutterTreeProvider } from './providers/tree/flutterTreeProvider';
+import { DashboardTreeProvider } from './providers/tree/dashboardTreeProvider';
+import { DashboardViewModel } from './services/dashboard/dashboardViewModel';
 import { AnalysisWebview } from './providers/webview/analysisWebview';
 import { PIPELINES, PIPELINE_STEPS } from './utils/pipelineSteps';
 
@@ -90,15 +92,24 @@ export function activate(context: vscode.ExtensionContext) {
         // commandManager.registerCommand(context, new FlutterCommand(COMMANDS.PUB_UPGRADE, { name: 'Pub Upgrade', steps: [{ name: 'Upgrading packages...', commandType: 'flutter', args: ['pub', 'upgrade'] }] }));
         commandManager.registerCommand(context, new FlutterCommand(COMMANDS.DEVICES, { name: 'Devices', steps: [{ name: 'Fetching devices...', commandType: 'flutter', args: ['devices'] }] }));
         
+        commandManager.registerCommand(context, new FlutterCommand(COMMANDS.GENERATE_JSON_SERIALIZABLE, PIPELINES.generateJsonSerializable));
+        
         commandManager.registerCommand(context, new DoctorCommand(context.extensionUri));
 
-        // 6. Register Sidebar Tree Provider
+        // 6. Register Sidebar Tree Providers
         const flutterTreeProvider = new FlutterTreeProvider();
         vscode.window.registerTreeDataProvider('flutter-cli-assistant.sidebar', flutterTreeProvider);
         
+        const dashboardViewModel = new DashboardViewModel();
+        const dashboardTreeProvider = new DashboardTreeProvider(dashboardViewModel);
+        vscode.window.registerTreeDataProvider('flutter-cli-assistant.projectDashboard', dashboardTreeProvider);
+
+        context.subscriptions.push({ dispose: () => dashboardViewModel.dispose() });
+
         // Re-render tree when workspace state changes (optional, but good practice)
         workspaceService.onDidChangeProjectState(() => {
             flutterTreeProvider.refresh();
+            dashboardTreeProvider.refresh();
         });
 
         logger.info('Flutter CLI Assistant activated successfully.');

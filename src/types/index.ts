@@ -65,6 +65,8 @@ export interface IProcessManager {
 export interface IFlutterExecutionService {
     run(args: string[], options?: CommandOptions): Promise<CommandResult>;
     runRaw(args: string[], options?: CommandOptions): Promise<{ stdout: string, stderr: string }>;
+    runDart(args: string[], options?: CommandOptions): Promise<CommandResult>;
+    runDartRaw(args: string[], options?: CommandOptions): Promise<{ stdout: string, stderr: string }>;
 }
 
 /**

@@ -11,3 +11,8 @@ All notable changes to the "Flutter CLI Assistant" extension will be documented 
 - **Dashboard Webview**: Added a rich UI dashboard showing Flutter/Dart versions, connected devices, and dependency counts.
 - **Error Analyzer**: Added intelligent diagnostics for common Flutter/Gradle build errors.
 - **Visual Doctor**: Added an icon-rich Webview parser for `flutter doctor`.
+
+## [1.1.0]
+- **Major Feature: Flutter Project Dashboard**: The sidebar now features a dedicated collapsible "Project" view that displays real-time statistics including Android/iOS versions, package names, bundle IDs, API configurations, and active flavors.
+- **Code Generation Pipeline**: Added a new command to "Generate JSON Serializable" files directly from the sidebar. It intelligently resolves FVM vs System dart paths and gracefully handles missing dependencies.
+- **Auto-Refresh Architecture**: The Dashboard implements an intelligent file watching system (pubspec.yaml, build.gradle, .env, etc.) to immediately refresh the UI without reloading the window.
